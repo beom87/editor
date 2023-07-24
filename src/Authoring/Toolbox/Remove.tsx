@@ -1,5 +1,5 @@
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { IconButton } from '../PreAuthoring.styles';
+import { IconButton } from '../Authoring.styles';
 import { useAtomValue } from 'jotai';
 import { authoringEditorAtom } from '../../atoms/atoms';
 

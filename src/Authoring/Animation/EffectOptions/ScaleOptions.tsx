@@ -1,9 +1,9 @@
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoIosArrowUp } from 'react-icons/io';
 import { useRef, useState } from 'react';
-import DMAnimation from '../../editor/dmAnimation';
-import { Collapse } from '../../PreAuthoring.styles';
-import { scaleToNumber } from '../../editor/util';
+import DMAnimation from '../../../editor/dmAnimation';
+import { Collapse } from '../../Authoring.styles';
+import { scaleToNumber } from '../../../editor/util';
 
 type TScaleOptionsProps = { type: string; animation: DMAnimation };
 

@@ -2,7 +2,7 @@ import { BiImageAdd } from 'react-icons/bi';
 import { MdTextFields } from 'react-icons/md';
 import { useAtomValue } from 'jotai';
 import { authoringEditorAtom } from '../../atoms/atoms';
-import { IconButton } from '../PreAuthoring.styles';
+import { IconButton } from '../Authoring.styles';
 
 export default function Insert() {
     const editor = useAtomValue(authoringEditorAtom);

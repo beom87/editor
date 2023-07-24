@@ -1,9 +1,9 @@
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoIosArrowUp } from 'react-icons/io';
 import { useRef, useState } from 'react';
-import DMAnimation from '../../editor/dmAnimation';
-import { Collapse } from '../../PreAuthoring.styles';
-import { pxToNumber } from '../../editor/util';
+import DMAnimation from '../../../editor/dmAnimation';
+import { Collapse } from '../../Authoring.styles';
+import { pxToNumber } from '../../../editor/util';
 
 type TMoveOptions = { type: string; animation: DMAnimation };
 export default function MoveOptions({ type, animation }: TMoveOptions) {

@@ -1,14 +1,14 @@
 import { useSetAtom } from 'jotai';
 import { activeElementsAtom, authoringEditorAtom } from '../atoms/atoms';
 import { useEffect, useRef } from 'react';
-import Editor from './editor/core';
+import Editor from '../editor/core';
 import Toolbox from './Toolbox';
 import View from './View';
 import Animation from './Animation';
 import { IconContext } from 'react-icons';
 import ToastMessage from '../components/ToastMessage/ToastMessage';
 
-export default function PreAuthoring() {
+export default function Authoring() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const setPreviewEditor = useSetAtom(authoringEditorAtom);
     const setActiveElements = useSetAtom(activeElementsAtom);

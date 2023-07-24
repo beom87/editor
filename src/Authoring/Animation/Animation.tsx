@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai';
 import { authoringEditorAtom } from '../../atoms/atoms';
 import { useEffect, useState } from 'react';
-import { TDMElements } from '../editor/core';
+import { TDMElements } from '../../editor/core';
 import SelectEffect from './SelectEffect';
 import Play from './Play';
 import EffectOptions from './EffectOptions';

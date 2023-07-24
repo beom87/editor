@@ -1,4 +1,4 @@
-import { Vr } from '../PreAuthoring.styles';
+import { Vr } from '../Authoring.styles';
 import Group from './Group';
 import Insert from './Insert';
 import Load from './Load';

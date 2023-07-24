@@ -1,10 +1,10 @@
 import { BsTrash } from 'react-icons/bs';
 import { useAtomValue } from 'jotai';
 import { authoringEditorAtom } from '../../../atoms/atoms';
-import { TDMElements } from '../../editor/core';
+import { TDMElements } from '../../../editor/core';
 import MultiRange from '../../../components/MultiRange/MultiRange';
-import DMAnimation from '../../editor/dmAnimation';
-import { IconButton } from '../../PreAuthoring.styles';
+import DMAnimation from '../../../editor/dmAnimation';
+import { IconButton } from '../../Authoring.styles';
 import RotateOptions from './RotateOptions';
 import MoveOptions from './MoveOptions';
 import ScaleOptions from './ScaleOptions';

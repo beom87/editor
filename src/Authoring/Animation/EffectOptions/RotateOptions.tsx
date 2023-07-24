@@ -1,8 +1,8 @@
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoIosArrowUp } from 'react-icons/io';
 import { useRef, useState } from 'react';
-import DMAnimation from '../../editor/dmAnimation';
-import { Collapse } from '../../PreAuthoring.styles';
+import DMAnimation from '../../../editor/dmAnimation';
+import { Collapse } from '../../Authoring.styles';
 
 type TRotateOptionsProps = { type: string; animation: DMAnimation };
 

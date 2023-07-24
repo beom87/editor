@@ -1,19 +1,20 @@
+import { FaSave } from 'react-icons/fa';
+import { IconButton, Tooltip } from '../Authoring.styles';
 import { useAtomValue } from 'jotai';
-import { IconButton, Tooltip } from '../PreAuthoring.styles';
-import { FiDownload } from 'react-icons/fi';
 import { authoringEditorAtom } from '../../atoms/atoms';
 
-export default function Load() {
+export default function Save() {
     const editor = useAtomValue(authoringEditorAtom);
+
     const onClick = () => {
         if (!editor) return;
-        editor.clear();
-        editor.loadFromJSON(window.localStorage.getItem('preAu') ?? '');
+        const data = editor.toData();
+        window.localStorage.setItem('preAu', JSON.stringify(data));
     };
     return (
-        <Tooltip name="LOAD">
+        <Tooltip name="SAVE">
             <IconButton className="p-1.5" onClick={onClick}>
-                <FiDownload />
+                <FaSave />
             </IconButton>
         </Tooltip>
     );

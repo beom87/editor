@@ -1,6 +1,6 @@
 import { ImUndo } from 'react-icons/im';
 import { ImRedo } from 'react-icons/im';
-import { IconButton } from '../PreAuthoring.styles';
+import { IconButton } from '../Authoring.styles';
 import { useAtomValue } from 'jotai';
 import { authoringEditorAtom } from '../../atoms/atoms';
 

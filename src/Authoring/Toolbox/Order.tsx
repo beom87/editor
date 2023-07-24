@@ -3,7 +3,7 @@ import { RiBringToFront } from 'react-icons/ri';
 import { RiSendBackward } from 'react-icons/ri';
 import { RiSendToBack } from 'react-icons/ri';
 
-import { IconButton, Tooltip } from '../PreAuthoring.styles';
+import { IconButton, Tooltip } from '../Authoring.styles';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { authoringEditorAtom, toastAtom } from '../../atoms/atoms';
 

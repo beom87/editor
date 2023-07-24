@@ -1,9 +1,9 @@
 import { FaRegObjectGroup } from 'react-icons/fa';
 import { FaRegObjectUngroup } from 'react-icons/fa';
-import { IconButton, Tooltip } from '../PreAuthoring.styles';
+import { IconButton, Tooltip } from '../Authoring.styles';
 import { useAtomValue } from 'jotai';
 import { authoringEditorAtom } from '../../atoms/atoms';
-import { GroupElement } from '../editor/elements';
+import { GroupElement } from '../../editor/elements';
 
 export default function Group() {
     const editor = useAtomValue(authoringEditorAtom);
