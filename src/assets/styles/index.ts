@@ -1,2 +1,1 @@
-import './number.css';
-import './operator.css';
+import './global.css';

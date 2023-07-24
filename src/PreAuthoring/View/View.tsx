@@ -1,3 +1,3 @@
 export default function View() {
-    return <>VIEW</>;
+    return <>OPTIONS</>;
 }

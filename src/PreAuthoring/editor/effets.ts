@@ -1,4 +1,4 @@
-import DMAnimation from './animation';
+import DMAnimation from './dmAnimation';
 import { TDMElements } from './core';
 import EE from './events';
 import { pxToNumber } from './util';
@@ -10,7 +10,7 @@ export default class Effects {
     private _animations = new Set<DMAnimation>();
     private _keyframeDefaultOption: KeyframeEffectOptions = { easing: 'linear', fill: 'forwards' };
 
-    constructor(element: Element) {
+    constructor(element: TDMElements) {
         this.element = element;
         this.id = element.id ?? '';
     }
@@ -22,8 +22,14 @@ export default class Effects {
         return animation;
     }
     delete(animation?: DMAnimation) {
-        if (animation) this._animations.delete(animation);
-        else this._animations.clear();
+        if (animation) {
+            this._animations.delete(animation);
+            animation.cancel();
+        } else {
+            this.cancel();
+            this._animations.clear();
+        }
+
         EE.emit('effects:delete');
     }
     getAnimations() {
@@ -31,17 +37,15 @@ export default class Effects {
     }
     updateTime(time: number) {
         const animations = this.getAnimations();
+
         animations.forEach((anim) => {
-            const endTime = (anim.effect?.getComputedTiming().endTime ?? 0) as number;
-            anim.currentTime = Math.min(time, endTime - 0.001);
-            anim.pause();
-            anim.commitStyles();
-            anim.cancel();
+            const endTime = (anim.effect?.getComputedTiming().delay ?? 0) as number;
+            anim.currentTime = time * 1000;
         });
     }
     toData() {
-        const animation = Array.from(this._animations).reduce((p, anim) => {
-            p.push({ keyframes: anim?.__getKeyframes(), options: anim.__getOptions() });
+        const animation = this.getAnimations().reduce((p, anim) => {
+            p.push({ keyframes: anim.effect.getKeyframes(), options: { type: anim.__type, ...anim.effect.getComputedTiming() } });
             return p;
         }, [] as { keyframes: Keyframe[] | PropertyIndexedKeyframes; options: KeyframeEffectOptions }[]);
 
@@ -51,7 +55,13 @@ export default class Effects {
         return Promise.all(
             Array.from(this._animations).map((anim) => {
                 anim.play();
-                return new Promise<void>((resolve) => anim.finished.then(() => resolve()));
+                return new Promise<void>((resolve) =>
+                    anim.finished.then(() => {
+                        // anim.commitStyles();
+                        // anim.cancel();
+                        resolve();
+                    })
+                );
             })
         );
     }
@@ -70,9 +80,8 @@ export default class Effects {
     reverse() {
         this._animations.forEach((anim) => anim.reverse());
     }
-    addMove(s: TDMElements[]) {
-        // this.style.translate
-        const [ox = 0, oy = 0] = pxToNumber(s[0].style.translate);
+    addMove() {
+        const [ox = 0, oy = 0] = pxToNumber(this.element.style.translate);
         const [dx, dy] = [ox + 100, oy + 100];
         const keyframes = [{ translate: `${dx}px ${dy}px` }];
         const options: KeyframeEffectOptions = { type: 'move', duration: 1000, delay: 0 };
@@ -98,7 +107,7 @@ export default class Effects {
         return animation;
     }
     addRotate() {
-        const keyframes = [{ transform: 'rotate(90deg)' }];
+        const keyframes = [{ rotate: '90deg' }];
         const options: KeyframeEffectOptions = { type: 'rotate', duration: 1000, delay: 0 };
         const animation = new DMAnimation(this.element, keyframes, { ...this._keyframeDefaultOption, ...options });
         this._animations.add(animation);
@@ -106,7 +115,7 @@ export default class Effects {
         return animation;
     }
     addScale() {
-        const keyframes = [{ transform: 'scale(3,3)' }];
+        const keyframes = [{ scale: '1 1' }];
         const options: KeyframeEffectOptions = { type: 'scale', duration: 1000, delay: 0 };
         const animation = new DMAnimation(this.element, keyframes, { ...this._keyframeDefaultOption, ...options });
         this._animations.add(animation);

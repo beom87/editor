@@ -3,6 +3,7 @@ import { customAlphabet } from 'nanoid';
 // ELEMENT - NUMBER
 export const pxToNumber = (px: string) => px.split(' ').map((s) => Number(s.replace('px', ''))) ?? [];
 export const degToNumber = (deg: string) => deg.split(' ').map((s) => Number(s.replace('deg', ''))) ?? [];
+export const scaleToNumber = (scale: string) => (scale === '1' ? [1, 1] : scale === '-1' ? [-1, -1] : scale.split(' ').map((s) => Number(s)));
 export const flipToNumber = (flip: boolean) => (flip ? -1 : 1);
 
 // UTIL

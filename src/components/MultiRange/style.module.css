@@ -1,0 +1,7 @@
+.container > input[type='range']::-webkit-slider-thumb {
+    pointer-events: all;
+}
+
+/* input[type=range]::-moz-range-thumb */
+
+/* input[type=range]::-ms-thumb */

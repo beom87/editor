@@ -98,7 +98,7 @@ export default class Editor {
     }
 
     // EFFECT - ANIMATION
-    effect(element: HTMLElement) {
+    effect(element: TDMElements) {
         if (element.id in this._effects) return this._effects[element.id];
         const effect = new Effects(element);
         this._effects[element.id] = effect;
@@ -121,13 +121,12 @@ export default class Editor {
     on(event: TEvents, listener: (data: any) => void) {
         EE.on(event, listener);
     }
-    off(event: TEvents, listner: Function) {
+    off(event: TEvents, listner: (data: any) => void) {
         EE.off(event, listner);
     }
     // emit(event: TEvents, data: any) {
     //     EE.emit(event, data);
     // }
-
     // IMPORT & EXPORT
     toData() {
         const elements = this.getElements().reduce((p, c) => {
@@ -156,7 +155,7 @@ export default class Editor {
         };
         const loadEffect = (data: IEffectData) => {
             if (!data.id) return;
-            const target = document.getElementById(data.id);
+            const target = document.getElementById(data.id) as TDMElements;
             if (!target) return;
             const effect = this.effect(target);
             data.animation?.forEach((anim) => effect.add({ keyframes: anim.keyframes, options: anim.options }));
@@ -178,6 +177,7 @@ export default class Editor {
     }
     clear() {
         this.remove(this.getElements());
+        this.getEffects().forEach((effect) => effect.delete());
     }
     undo() {
         SO.index -= 1;
@@ -196,20 +196,19 @@ export default class Editor {
     bringToFront(element: HTMLElement) {
         this.canvas.insertAdjacentElement('beforeend', element);
     }
-    bringToFoward(element: HTMLElement) {
+    bringFoward(element: HTMLElement) {
         if (element.nextSibling) this.canvas.insertBefore(element.nextSibling, element);
     }
     sendToBack(element: HTMLElement) {
         this.canvas.insertAdjacentElement('afterbegin', element);
     }
-    sendToBackward(element: HTMLElement) {
+    sendBackward(element: HTMLElement) {
         if (element.previousSibling) this.canvas.insertBefore(element, element.previousSibling);
     }
-    setActiveFocus(elements: TDMElements[]) {
-        this._activeElement = elements;
-        this.getElements().forEach((element) => (elements.includes(element) ? element.classList.add('focus') : element.classList.remove('focus')));
+    setActiveElements(elements: TDMElements[], isActive: boolean) {
+        if (isActive) EE.emit('element:active', elements);
+        else EE.emit('element:discardActive');
     }
-
     activeFocus() {
         this.inactiveFocus();
         const pointerdown = (e: PointerEvent) => e.target === this.canvas && EE.emit('element:discardActive');

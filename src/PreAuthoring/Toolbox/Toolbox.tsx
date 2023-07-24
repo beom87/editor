@@ -1,9 +1,12 @@
 import { Vr } from '../PreAuthoring.styles';
-import InsertImage from './InsertImage';
-import InsertTextbox from './InsertTextbox';
+import Group from './Group';
+import Insert from './Insert';
 import Load from './Load';
+import Order from './Order';
 import Preview from './Preview';
+import Remove from './Remove';
 import Save from './Save';
+import Stack from './Stack';
 
 export default function Toolbox() {
     return (
@@ -11,9 +14,16 @@ export default function Toolbox() {
             <Save />
             <Load />
             <Preview />
-            <InsertImage />
-            <InsertTextbox />
             <Vr />
+            <Stack />
+            <Vr />
+            <Insert />
+            <Vr />
+            <Remove />
+            <Vr />
+            <Group />
+            <Vr />
+            <Order />
         </div>
     );
 }

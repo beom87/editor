@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai';
-import { IconButton } from '../PreAuthoring.styles';
+import { IconButton, Tooltip } from '../PreAuthoring.styles';
 import { FiDownload } from 'react-icons/fi';
 import { authoringEditorAtom } from '../../atoms/atoms';
 
@@ -11,8 +11,10 @@ export default function Load() {
         editor.loadFromJSON(window.localStorage.getItem('preAu') ?? '');
     };
     return (
-        <IconButton className="p-1.5" onClick={onClick}>
-            <FiDownload className="w-full h-full" />
-        </IconButton>
+        <Tooltip name="LOAD">
+            <IconButton className="p-1.5" onClick={onClick}>
+                <FiDownload />
+            </IconButton>
+        </Tooltip>
     );
 }

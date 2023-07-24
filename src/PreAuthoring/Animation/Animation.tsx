@@ -1,30 +1,28 @@
 import { useAtomValue } from 'jotai';
 import { authoringEditorAtom } from '../../atoms/atoms';
-import { useEffect, useRef, useState } from 'react';
-import { pxToNumber } from '../editor/util';
+import { useEffect, useState } from 'react';
 import { TDMElements } from '../editor/core';
+import SelectEffect from './SelectEffect';
+import Play from './Play';
+import EffectOptions from './EffectOptions';
 
 export default function Animation() {
     const editor = useAtomValue(authoringEditorAtom);
     const [elements, setElements] = useState<TDMElements[]>();
 
-    const timeline = useRef('');
-
-    const onPlayClick = async () => {
+    const onEffectChange = (element: TDMElements, effect?: { type: string }) => {
         if (!editor) return;
-        await editor.play();
-    };
+        const effects = editor.effect(element);
 
-    const onTimelineChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-        timeline.current = e.target.value;
-        if (!editor) return;
-        editor.updateTime(Number(e.target.value));
+        if (effect?.type === 'move') effects.addMove();
+        if (effect?.type === 'scale') effects.addScale();
+        if (effect?.type === 'rotate') effects.addRotate();
+        if (effect?.type === 'fadeIn') effects.addFadeIn();
+        if (effect?.type === 'fadeOut') effects.addFadeOut();
     };
 
     const onEffectListClick = (element: TDMElements) => {
-        console.log(element);
-        const a = editor?.effect(element);
-        console.log(a?.getAnimations());
+        // const a = editor?.effect(element);
     };
 
     useEffect(() => {
@@ -32,27 +30,27 @@ export default function Animation() {
 
         editor?.on('element:add', listner);
         editor?.on('element:remove', listner);
+        editor?.on('effects:add', listner);
+        editor?.on('effects:delete', listner);
 
         return () => {
             editor?.off('element:add', listner);
             editor?.off('element:remove', listner);
+            editor?.off('effects:add', listner);
+            editor?.off('effects:delete', listner);
         };
     }, [editor]);
 
     return (
         <>
-            <div className="flex gap-x-4 my-1">
-                <button className="border rounded p-1" onClick={onPlayClick}>
-                    PLAY
-                </button>
-                <input className="flex-[1]" type="range" min="0" max="60000" onChange={onTimelineChange}></input>
-            </div>
+            <Play />
             {elements?.map((element, index) => (
                 <div key={element.id + index} className="border rounded p-1" onClick={() => onEffectListClick(element)}>
                     <div className="mx-1 text-bold text-lg">
-                        <span className="text-red-300 w-28 inline-block">{element.dataset.type?.toUpperCase()}</span>
-                        <button className="border p-1 mx-1 rounded">ADD EFFECT</button>
+                        <span className="text-red-300 w-40 inline-block">{element.dataset.type?.toUpperCase()}</span>
+                        <SelectEffect onChange={(effect) => onEffectChange(element, effect)} />
                     </div>
+                    <EffectOptions element={element} />
                 </div>
             ))}
         </>
