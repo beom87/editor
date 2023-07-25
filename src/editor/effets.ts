@@ -1,7 +1,6 @@
 import DMAnimation from './dmAnimation';
 import { TDMElements } from './core';
 import EE from './events';
-import { pxToNumber } from './util';
 
 export default class Effects {
     id;
@@ -18,7 +17,9 @@ export default class Effects {
     add({ keyframes, options }: { keyframes: Keyframe[] | PropertyIndexedKeyframes; options?: KeyframeEffectOptions }) {
         const animation = new DMAnimation(this.element, keyframes, { ...this._keyframeDefaultOption, ...options });
         this._animations.add(animation);
+        animation.persist();
         EE.emit('effects:add');
+
         return animation;
     }
     delete(animation?: DMAnimation) {
@@ -37,10 +38,10 @@ export default class Effects {
     }
     updateTime(time: number) {
         const animations = this.getAnimations();
-
         animations.forEach((anim) => {
-            const endTime = (anim.effect?.getComputedTiming().delay ?? 0) as number;
-            anim.currentTime = time * 1000;
+            const endTime = (anim.effect?.getComputedTiming().endTime ?? 0) as number;
+            anim.currentTime = Math.min(time, endTime);
+            anim.pause();
         });
     }
     toData() {
@@ -53,15 +54,11 @@ export default class Effects {
     }
     play() {
         return Promise.all(
-            Array.from(this._animations).map((anim) => {
+            this.getAnimations().map(async (anim) => {
+                const timing = anim.effect.getComputedTiming();
+                if ((anim.currentTime ?? 0) >= (timing.endTime ?? 0)) return;
                 anim.play();
-                return new Promise<void>((resolve) =>
-                    anim.finished.then(() => {
-                        // anim.commitStyles();
-                        // anim.cancel();
-                        resolve();
-                    })
-                );
+                return anim.finished;
             })
         );
     }
@@ -81,9 +78,7 @@ export default class Effects {
         this._animations.forEach((anim) => anim.reverse());
     }
     addMove() {
-        const [ox = 0, oy = 0] = pxToNumber(this.element.style.translate);
-        const [dx, dy] = [ox + 100, oy + 100];
-        const keyframes = [{ translate: `${dx}px ${dy}px` }];
+        const keyframes = [{ translate: '0px 0px' }];
         const options: KeyframeEffectOptions = { type: 'move', duration: 1000, delay: 0 };
         const animation = new DMAnimation(this.element, keyframes, { ...this._keyframeDefaultOption, ...options });
         this._animations.add(animation);
@@ -122,5 +117,4 @@ export default class Effects {
         EE.emit('effects:add');
         return animation;
     }
-    // addVisible() {}
 }

@@ -1,5 +1,5 @@
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { IconButton } from '../Authoring.styles';
+import { IconButton, Tooltip } from '../Authoring.styles';
 import { useAtomValue } from 'jotai';
 import { authoringEditorAtom } from '../../atoms/atoms';
 
@@ -12,8 +12,10 @@ export default function Remove() {
         editor.remove(elements);
     };
     return (
-        <IconButton className="p-1" onClick={onClick}>
-            <RiDeleteBin6Line />
-        </IconButton>
+        <Tooltip name="REMOVE">
+            <IconButton className="p-1" onClick={onClick}>
+                <RiDeleteBin6Line />
+            </IconButton>
+        </Tooltip>
     );
 }

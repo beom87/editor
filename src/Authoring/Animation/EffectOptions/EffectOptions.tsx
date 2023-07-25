@@ -15,8 +15,8 @@ export default function EffectOptions({ element }: { element: TDMElements }) {
     const effects = editor?.effect(element).getAnimations();
 
     const onTilmelineChange = (animation: DMAnimation, { min, max }: { min: number; max: number }) => {
-        const delay = min * 1000;
-        const duration = (max - min) * 1000;
+        const delay = min;
+        const duration = max - min;
         animation.effect.updateTiming({ delay, duration });
     };
 

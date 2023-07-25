@@ -1,3 +1,11 @@
 export default function View() {
-    return <>OPTIONS</>;
+    return (
+        <>
+            <div>OPTION 1</div>
+            <div>OPTION 2</div>
+            <div>OPTION 3</div>
+            <div>...</div>
+            <div>OPTION n</div>
+        </>
+    );
 }

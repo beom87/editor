@@ -105,9 +105,9 @@ export default class Editor {
         return effect;
     }
     play() {
-        return Promise.all(this.getEffects().map((effect) => effect.play()));
+        return this.getEffects().map((effect) => effect.play());
     }
-    stop() {
+    pause() {
         this.getEffects().forEach((effect) => effect.pause());
     }
     cancel() {

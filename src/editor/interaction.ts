@@ -24,13 +24,14 @@ export default class Interaction {
         const pointermoveListner = (e: PointerEvent) => {
             const dx = currentId === 'dm-bc' ? 0 : e.clientX - client.x;
             const dy = currentId === 'dm-rc' ? 0 : e.clientY - client.y;
-            element.style.width = offset.width + dx + 'px';
-            element.style.height = offset.height + dy + 'px';
+            element.style.width = (offset.width + dx).toFixed(2) + 'px';
+            element.style.height = (offset.height + dy).toFixed(2) + 'px';
+
             this.children.forEach((child) => {
-                child.element.style.width = child.offset.width + dx + 'px';
-                child.element.style.height = child.offset.height + dy + 'px';
+                child.element.style.width = (child.offset.width + dx).toFixed(2) + 'px';
+                child.element.style.height = (child.offset.height + dy).toFixed(2) + 'px';
             });
-            EE.emit('element:size', element);
+            EE.emit('element:size', [element]);
         };
 
         const pointerupListner = () => {
@@ -38,7 +39,7 @@ export default class Interaction {
             this.children = [];
             document.removeEventListener('pointermove', pointermoveListner);
             document.removeEventListener('pointerup', pointerupListner);
-            EE.emit('element:size:end', element);
+            EE.emit('element:size:end', [element]);
             SO.notify();
         };
 
@@ -79,13 +80,13 @@ export default class Interaction {
             const deg = (Math.atan2(y, x) * 180) / Math.PI - 90;
             element.style.rotate = `${deg}deg`;
 
-            EE.emit('element:rotate', element);
+            EE.emit('element:rotate', [element]);
         };
         const pointerupListner = () => {
             document.body.classList.remove('cursor-crosshair');
             document.removeEventListener('pointermove', pointermoveListner);
             document.removeEventListener('pointerup', pointerupListner);
-            EE.emit('element:rotate:end', element);
+            EE.emit('element:rotate:end', [element]);
             SO.notify();
         };
 
@@ -116,12 +117,12 @@ export default class Interaction {
             // TODO : rotate값만큼 limit값 조절해줄 필요성이 있음
             const limit = 20;
 
-            translate.x = Math.max(-offsetWidth + limit, Math.min(dx + origin.x, this.area.width - limit));
-            translate.y = Math.max(-offsetHeight + limit, Math.min(dy + origin.y, this.area.height - limit));
+            translate.x = Math.round(Math.max(-offsetWidth + limit, Math.min(dx + origin.x, this.area.width - limit)));
+            translate.y = Math.round(Math.max(-offsetHeight + limit, Math.min(dy + origin.y, this.area.height - limit)));
 
             element.style.translate = `${translate.x}px ${translate.y}px`;
 
-            EE.emit('element:drag', element);
+            EE.emit('element:drag', [element]);
         };
 
         const pointerupListner = () => {
@@ -131,7 +132,7 @@ export default class Interaction {
             document.removeEventListener('pointermove', pointermoveListner);
             document.removeEventListener('pointerup', pointerupListner);
 
-            EE.emit('element:drag:end', element);
+            EE.emit('element:drag:end', [element]);
             SO.notify();
         };
 
@@ -153,26 +154,4 @@ export default class Interaction {
 
         return () => element.removeEventListener('pointerdown', pointerdownListner);
     }
-
-    // getTranslate(transform: string) {
-    //     const [translateX, translateY] = (transform.match(this.translateReg)?.[0] ?? '')
-    //         .split(this.translateReg)
-    //         .filter(Boolean)
-    //         .map((t) => Number(t));
-    //     return { translateX: translateX ?? 0, translateY: translateY ?? 0 };
-    // }
-    // getRotate(transform: string) {
-    //     const [rotate] = (transform.match(this.rotateReg)?.[0] ?? '')
-    //         .split(this.rotateReg)
-    //         .filter(Boolean)
-    //         .map((r) => Number(r));
-    //     return { deg: rotate ?? 0 };
-    // }
-    // getScale(transform: string) {
-    //     const [scaleX, scaleY] = (transform.match(this.scaleReg)?.[0] ?? '')
-    //         .split(this.scaleReg)
-    //         .filter(Boolean)
-    //         .map((s) => Number(s));
-    //     return { scaleX: scaleX ?? 1, scaleY: scaleY ?? 1 };
-    // }
 }

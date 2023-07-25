@@ -1,6 +1,6 @@
 import { ImUndo } from 'react-icons/im';
 import { ImRedo } from 'react-icons/im';
-import { IconButton } from '../Authoring.styles';
+import { IconButton, Tooltip } from '../Authoring.styles';
 import { useAtomValue } from 'jotai';
 import { authoringEditorAtom } from '../../atoms/atoms';
 
@@ -14,12 +14,16 @@ export default function Stack() {
 
     return (
         <>
-            <IconButton className="p-2" onClick={onStackClick.bind(null, 'undo')}>
-                <ImUndo />
-            </IconButton>
-            <IconButton className="p-2" onClick={onStackClick.bind(null, 'redo')}>
-                <ImRedo />
-            </IconButton>
+            <Tooltip name="UNDO">
+                <IconButton className="p-2" onClick={onStackClick.bind(null, 'undo')}>
+                    <ImUndo />
+                </IconButton>
+            </Tooltip>
+            <Tooltip name="REDO">
+                <IconButton className="p-2" onClick={onStackClick.bind(null, 'redo')}>
+                    <ImRedo />
+                </IconButton>
+            </Tooltip>
         </>
     );
 }
