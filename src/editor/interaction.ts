@@ -3,10 +3,6 @@ import { BasicElement } from './elements';
 import { pxToNumber } from './util';
 
 export default class Interaction {
-    // readonly translateReg = /translate\((-?\d.+?)px, (-?\d.+?)px\)/g;
-    // readonly rotateReg = /rotate\((-?\d.+?)deg\)/g;
-    // readonly scaleReg = /scale\((-?\d.+?), (-?\d.+?)\)/g;
-    // readonly valueReg = /(-?\d.+?)px/g;
     readonly border = ['bc', 'br', 'rc'];
     area;
     children: { element: HTMLElement; offset: { width: number; height: number } }[] = [];
@@ -20,17 +16,22 @@ export default class Interaction {
         let currentId = '';
         const client = { x: 0, y: 0 };
         const offset = { width: 0, height: 0 };
+        const type = element.dataset.type ?? '';
+        const isOneWay = [''].includes(type);
 
         const pointermoveListner = (e: PointerEvent) => {
             const dx = currentId === 'dm-bc' ? 0 : e.clientX - client.x;
             const dy = currentId === 'dm-rc' ? 0 : e.clientY - client.y;
-            element.style.width = (offset.width + dx).toFixed(2) + 'px';
-            element.style.height = (offset.height + dy).toFixed(2) + 'px';
+            const dxy = currentId === 'dm-br' && isOneWay && { x: dy * (offset.width / offset.height), y: dy };
+
+            element.style.width = offset.width + (dxy ? dxy.x : dx) + 'px';
+            element.style.height = offset.height + (dxy ? dxy.y : dy) + 'px';
 
             this.children.forEach((child) => {
-                child.element.style.width = (child.offset.width + dx).toFixed(2) + 'px';
-                child.element.style.height = (child.offset.height + dy).toFixed(2) + 'px';
+                child.element.style.width = child.offset.width + (dxy ? dxy.x : dx) + 'px';
+                child.element.style.height = child.offset.height + (dxy ? dxy.y : dy) + 'px';
             });
+
             EE.emit('element:size', [element]);
         };
 

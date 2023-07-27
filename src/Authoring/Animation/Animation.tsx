@@ -1,16 +1,16 @@
 import { useAtomValue } from 'jotai';
 import { authoringEditorAtom } from '../../atoms/atoms';
 import { useEffect, useState } from 'react';
-import { TDMElements } from '../../editor/core';
+import { DMElements } from '../../editor/core';
 import SelectEffect from './SelectEffect';
 import Play from './Play';
 import EffectOptions from './EffectOptions';
 
 export default function Animation() {
     const editor = useAtomValue(authoringEditorAtom);
-    const [elements, setElements] = useState<TDMElements[]>();
+    const [elements, setElements] = useState<DMElements[]>();
 
-    const onEffectChange = (element: TDMElements, effect?: { type: string }) => {
+    const onEffectChange = (element: DMElements, effect?: { type: string }) => {
         if (!editor) return;
         const effects = editor.effect(element);
 
@@ -21,7 +21,7 @@ export default function Animation() {
         if (effect?.type === 'fadeOut') effects.addFadeOut();
     };
 
-    const onEffectListClick = (element: TDMElements) => {
+    const onEffectListClick = (element: DMElements) => {
         // const a = editor?.effect(element);
     };
 

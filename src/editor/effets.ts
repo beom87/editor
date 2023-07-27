@@ -1,5 +1,5 @@
 import DMAnimation from './dmAnimation';
-import { TDMElements } from './core';
+import { DMElements } from './core';
 import EE from './events';
 
 export default class Effects {
@@ -9,7 +9,7 @@ export default class Effects {
     private _animations = new Set<DMAnimation>();
     private _keyframeDefaultOption: KeyframeEffectOptions = { easing: 'linear', fill: 'forwards' };
 
-    constructor(element: TDMElements) {
+    constructor(element: DMElements) {
         this.element = element;
         this.id = element.id ?? '';
     }

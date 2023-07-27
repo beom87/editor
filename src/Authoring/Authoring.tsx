@@ -34,7 +34,7 @@ export default function Authoring() {
     }, [setPreviewEditor, setActiveElements]);
 
     return (
-        <IconContext.Provider value={{ className: 'w-full h-full' }}>
+        <IconContext.Provider value={{ className: 'w-full h-full text-gray-800' }}>
             <ToastMessage>
                 <div className="flex flex-col h-screen">
                     <header className="flex p-1 items-center">
@@ -44,7 +44,7 @@ export default function Authoring() {
                         <div className="flex-[1] border p-1">
                             <View />
                         </div>
-                        <div ref={canvasRef} className="w-[800px] h-[500px] border rounded"></div>
+                        <div ref={canvasRef} className="w-[800px] h-[500px] min-w-[800px] min-h-[500px] border rounded"></div>
                         <div className="flex-[1.5] border p-1">
                             <Format />
                         </div>

@@ -5,7 +5,7 @@ type TButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 type THTMLProps<T = HTMLDivElement> = React.HTMLAttributes<T>;
 
 export const IconButton = ({ children, className, ...props }: TButtonProps) => (
-    <button className={classNames('border rounded p-1 w-9 h-9', className)} {...props}>
+    <button className={classNames('border rounded p-1 w-8 h-8', className)} {...props}>
         {children}
     </button>
 );

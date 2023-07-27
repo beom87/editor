@@ -1,7 +1,7 @@
 import { BsTrash } from 'react-icons/bs';
 import { useAtomValue } from 'jotai';
 import { authoringEditorAtom } from '../../../atoms/atoms';
-import { TDMElements } from '../../../editor/core';
+import { DMElements } from '../../../editor/core';
 import MultiRange from '../../../components/MultiRange/MultiRange';
 import DMAnimation from '../../../editor/dmAnimation';
 import { IconButton } from '../../Authoring.styles';
@@ -10,7 +10,7 @@ import MoveOptions from './MoveOptions';
 import ScaleOptions from './ScaleOptions';
 import FadeOptions from './FadeOptions';
 
-export default function EffectOptions({ element }: { element: TDMElements }) {
+export default function EffectOptions({ element }: { element: DMElements }) {
     const editor = useAtomValue(authoringEditorAtom);
     const effects = editor?.effect(element).getAnimations();
 

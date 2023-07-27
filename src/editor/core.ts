@@ -3,12 +3,12 @@ import { BasicElement, GroupElement, WrapElement } from './elements';
 import Effects from './effets';
 import { generateId, isIntersect } from './util';
 import './editor.css';
-export type TDMElements = WrapElement | GroupElement;
+export type DMElements = WrapElement | GroupElement;
 
 export default class Editor {
     canvas;
     private _effects: Record<string, Effects> = {};
-    private _activeElement: TDMElements[] = [];
+    private _activeElement: DMElements[] = [];
     private _stackLoad = false;
 
     inactiveFocus = () => {};
@@ -35,19 +35,19 @@ export default class Editor {
     }
 
     // ELEMET HANDLER
-    add(elements: TDMElements | TDMElements[]) {
+    add(elements: DMElements | DMElements[]) {
         const _elements = Array.isArray(elements) ? elements : [elements];
         _elements.forEach((element) => this.canvas.appendChild(element));
         EE.emit('element:add');
         SO.notify();
     }
-    remove(elements: TDMElements | TDMElements[]) {
+    remove(elements: DMElements | DMElements[]) {
         const _elements = Array.isArray(elements) ? elements : [elements];
         _elements.forEach((element) => element.remove());
         EE.emit('element:remove');
         SO.notify();
     }
-    toGroup(elements: TDMElements | TDMElements[], options?: IGroupElementOptions) {
+    toGroup(elements: DMElements | DMElements[], options?: IGroupElementOptions) {
         const group = this._createGroup(options);
         group.__add(elements, { hasStyle: !!options?.cssText });
         this.add(group);
@@ -98,7 +98,7 @@ export default class Editor {
     }
 
     // EFFECT - ANIMATION
-    effect(element: TDMElements) {
+    effect(element: DMElements) {
         if (element.id in this._effects) return this._effects[element.id];
         const effect = new Effects(element);
         this._effects[element.id] = effect;
@@ -124,9 +124,7 @@ export default class Editor {
     off(event: TEvents, listner: (data: any) => void) {
         EE.off(event, listner);
     }
-    // emit(event: TEvents, data: any) {
-    //     EE.emit(event, data);
-    // }
+
     // IMPORT & EXPORT
     toData() {
         const elements = this.getElements().reduce((p, c) => {
@@ -149,13 +147,13 @@ export default class Editor {
             let element;
             if (data.type === 'textbox' && data.text) element = this.textbox(data.text, data);
             if (data.type === 'image' && data.src) element = this.image(data.src, data);
-            if (data.type === 'group' && data.children) element = this.toGroup(data.children.map(loadElement) as TDMElements | TDMElements[], data);
+            if (data.type === 'group' && data.children) element = this.toGroup(data.children.map(loadElement) as DMElements | DMElements[], data);
             if (element) this.add(element);
             return element;
         };
         const loadEffect = (data: IEffectData) => {
             if (!data.id) return;
-            const target = document.getElementById(data.id) as TDMElements;
+            const target = document.getElementById(data.id) as DMElements;
             if (!target) return;
             const effect = this.effect(target);
             data.animation?.forEach((anim) => effect.add({ keyframes: anim.keyframes, options: anim.options }));
@@ -170,7 +168,7 @@ export default class Editor {
         return this._activeElement;
     }
     getElements() {
-        return Array.from(this.canvas.children) as TDMElements[];
+        return Array.from(this.canvas.children) as DMElements[];
     }
     getEffects() {
         return Object.values(this._effects);
@@ -178,6 +176,7 @@ export default class Editor {
     clear() {
         this.remove(this.getElements());
         this.getEffects().forEach((effect) => effect.delete());
+        this._effects = {};
     }
     undo() {
         SO.index -= 1;
@@ -205,7 +204,7 @@ export default class Editor {
     sendBackward(element: HTMLElement) {
         if (element.previousSibling) this.canvas.insertBefore(element, element.previousSibling);
     }
-    setActiveElements(elements: TDMElements[], isActive: boolean) {
+    setActiveElements(elements: DMElements[], isActive: boolean) {
         if (isActive) EE.emit('element:active', elements);
         else EE.emit('element:discardActive');
     }
@@ -215,7 +214,7 @@ export default class Editor {
 
         this.canvas.addEventListener('pointerdown', pointerdown);
 
-        EE.on('element:active', (elements: TDMElements[]) => {
+        EE.on('element:active', (elements: DMElements[]) => {
             this._activeElement = elements;
             this.getElements().forEach((element) => (elements.includes(element) ? element.classList.add('focus') : element.classList.remove('focus')));
         });
@@ -300,9 +299,10 @@ export default class Editor {
     }
 
     // UTIL - EDITOR SIDE
-    private _createDMElement<T extends BasicElement>(name: string) {
+    private _createDMElement<T extends BasicElement>(name: string, type: string) {
         const dm = document.createElement(name) as T;
 
+        dm.setAttribute('data-type', type);
         dm.__addDrag();
         dm.__addRotate();
         dm.__addSize();
@@ -310,10 +310,9 @@ export default class Editor {
         return dm;
     }
     private _createWrap(type: string, options?: IWrapElementOptions) {
-        const wrap = this._createDMElement<WrapElement>(WrapElement.__name);
+        const wrap = this._createDMElement<WrapElement>(WrapElement.__name, type);
 
         wrap.classList.add('wrap');
-        wrap.setAttribute('data-type', type);
         wrap.id = options?.id ?? generateId();
         wrap.style.cssText = options?.cssText ?? '';
         wrap.__flipX = !!options?.flipX;
@@ -322,10 +321,9 @@ export default class Editor {
         return wrap;
     }
     private _createGroup(options?: IGroupElementOptions) {
-        const group = this._createDMElement<GroupElement>(GroupElement.__name);
+        const group = this._createDMElement<GroupElement>(GroupElement.__name, 'group');
 
         group.classList.add('group');
-        group.setAttribute('data-type', 'group');
         group.id = options?.id ?? generateId();
         group.style.cssText = options?.cssText ?? '';
         group.__flipX = !!options?.flipX;
