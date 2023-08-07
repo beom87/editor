@@ -1,7 +1,7 @@
 import { useSetAtom } from 'jotai';
 import { activeElementsAtom, authoringEditorAtom } from '../atoms/atoms';
 import { useEffect, useRef } from 'react';
-import Editor from '../editor/core';
+import Editor, { DMElements } from '../editor/core';
 import Toolbox from './Toolbox';
 import View from './View';
 import Animation from './Animation';
@@ -18,7 +18,7 @@ export default function Authoring() {
         if (!canvasRef.current) return;
         const editor = new Editor(canvasRef.current);
         setPreviewEditor(editor);
-        const activeElemetnsListner = (elements: HTMLElement[]) => setActiveElements(elements);
+        const activeElemetnsListner = (elements: DMElements[]) => setActiveElements(elements);
 
         editor.on('element:active', activeElemetnsListner);
         editor.on('element:drag:end', activeElemetnsListner);

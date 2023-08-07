@@ -3,10 +3,12 @@ import { BasicElement, GroupElement, WrapElement } from './elements';
 import Effects from './effets';
 import { generateId, isIntersect } from './util';
 import './editor.css';
+import DMKeyboard from './dmKeyboard';
 export type DMElements = WrapElement | GroupElement;
 
 export default class Editor {
     canvas;
+    _dmKeyboard;
     private _effects: Record<string, Effects> = {};
     private _activeElement: DMElements[] = [];
     private _stackLoad = false;
@@ -20,6 +22,7 @@ export default class Editor {
         this.canvas = element;
         this.canvas.classList.add('dm-canvas');
         this.canvas.tabIndex = 0;
+        this._dmKeyboard = new DMKeyboard(this);
 
         // import('./editor.css');
 
@@ -70,6 +73,8 @@ export default class Editor {
         this.remove(element);
         EE.emit('element:ungroup');
         SO.notify();
+
+        return children;
     }
 
     // ELEMENT CREATOR
@@ -204,7 +209,7 @@ export default class Editor {
     sendBackward(element: HTMLElement) {
         if (element.previousSibling) this.canvas.insertBefore(element, element.previousSibling);
     }
-    setActiveElements(elements: DMElements[], isActive: boolean) {
+    activeElements(elements: DMElements[], isActive: boolean) {
         if (isActive) EE.emit('element:active', elements);
         else EE.emit('element:discardActive');
     }
@@ -231,7 +236,7 @@ export default class Editor {
     activeSelection() {
         this.inactiveSelection();
         const slelectionClient = { x: 0, y: 0 };
-        const selectionElement = document.createElement('div');
+        const selectionElement: HTMLElement = document.createElement('div');
 
         const pointermoveListner = (e: PointerEvent) => {
             const dx = e.clientX - slelectionClient.x;
@@ -242,7 +247,7 @@ export default class Editor {
             selectionElement.style.height = Math.abs(dy) + 'px';
         };
         const pointerupListner = () => {
-            const targets = this.getElements().filter((element) => isIntersect(selectionElement, element));
+            const targets = this.getElements().filter((element) => element !== selectionElement && isIntersect(selectionElement, element));
 
             EE.emit('element:active', targets);
             selectionElement.style.width = '0';
@@ -260,7 +265,7 @@ export default class Editor {
             selectionElement.style.top = slelectionClient.y + 'px';
             selectionElement.style.left = slelectionClient.x + 'px';
             selectionElement.style.border = '1px solid red';
-            document.body.appendChild(selectionElement);
+            this.canvas.appendChild(selectionElement);
             document.addEventListener('pointermove', pointermoveListner);
             document.addEventListener('pointerup', pointerupListner);
         };
@@ -287,15 +292,10 @@ export default class Editor {
     }
     activeKeyboard() {
         this.inactiveKeyboard();
-        const keydownListner = (e: KeyboardEvent) => {
-            const activeElements = this.getActiveElements();
-            console.log(activeElements);
-        };
 
-        this.canvas.addEventListener('keydown', keydownListner);
-        return () => {
-            this.canvas.removeEventListener('keydown', keydownListner);
-        };
+        this._dmKeyboard.active();
+
+        return () => this._dmKeyboard.inActive();
     }
 
     // UTIL - EDITOR SIDE

@@ -8,13 +8,34 @@ import { WrapElement } from '../../editor/elements';
 import { useEffect, useRef, useState } from 'react';
 
 const initialOpenState = { weight: false, color: false, size: false };
-const initialStyle = { color: '#ff0000', fontSize: '16' };
-const fontWeightList = ['100', '200', '300', '400', '500', '600', '700', '800', '900'];
+const fontWeightList = [
+    { weight: '100', name: 'THIN' },
+    { weight: '200', name: 'EXTRA THIN' },
+    { weight: '300', name: 'LIGHT' },
+    { weight: '400', name: 'NORMAL' },
+    { weight: '500', name: 'MEDIUM' },
+    { weight: '600', name: 'SEMI BOLD' },
+    { weight: '700', name: 'BOLD' },
+    { weight: '800', name: 'EXTRA BOLD' },
+    { weight: '900', name: 'BLACK' }
+];
+const fontSizeList = [
+    { size: '12px', name: 'TEXT-XS' },
+    { size: '14px', name: 'TEXT-SM' },
+    { size: '16px', name: 'TEXT-BASE' },
+    { size: '18px', name: 'TEXT-LG' },
+    { size: '20px', name: 'TEXT-XL' },
+    { size: '24px', name: 'TEXT-2XL' },
+    { size: '30px', name: 'TEXT-3XL' },
+    { size: '36px', name: 'TEXT-4XL' },
+    { size: '48px', name: 'TEXT-5XL' },
+    { size: '60px', name: 'TEXT-6XL' }
+];
 
 export default function TextStyle() {
     const activeElement = useAtomValue(activeElementsAtom)?.[0];
     const [open, setOpen] = useState(initialOpenState);
-    const [style, setStyle] = useState({ color: '#ff0000', fontSize: '16' });
+    const [style, setStyle] = useState({ color: '#ff0000' });
     const range = useRef<Range>();
 
     const onOpenClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, type: keyof typeof initialOpenState) => {
@@ -22,7 +43,7 @@ export default function TextStyle() {
         setOpen((prev) => ({ ...initialOpenState, [type]: !prev[type] }));
     };
 
-    const onStyleChange = (e: React.ChangeEvent<HTMLInputElement>, type: keyof typeof initialStyle) => {
+    const onStyleChange = (e: React.ChangeEvent<HTMLInputElement>, type: keyof typeof style) => {
         const isPX = ['fontSize'].includes(type);
         const suffix = isPX ? 'px' : '';
         setStyle((prev) => ({ ...prev, [type]: e.target.value + suffix }));
@@ -30,8 +51,8 @@ export default function TextStyle() {
 
     const onStyleApply = (type: 'fontWeight' | 'color' | 'fontSize', value?: string) => {
         if (!activeElement || activeElement.dataset.type !== 'textbox' || !(activeElement instanceof WrapElement)) return;
-        if (type === 'fontWeight') activeElement.__setTextStyle({ [type]: value });
-        else activeElement.__setTextStyle({ [type]: style?.[type] });
+        if (value) activeElement.__setTextStyle({ [type]: value });
+        else activeElement.__setTextStyle({ [type]: style?.[type as keyof typeof style] });
     };
 
     useEffect(() => {
@@ -65,14 +86,14 @@ export default function TextStyle() {
                 </Tooltip>
                 {open.weight && (
                     <div className="absolute whitespace-pre border rounded p-0.5 bg-white z-10">
-                        {fontWeightList.map((weight) => (
+                        {fontWeightList.map((font) => (
                             <button
-                                key={weight}
+                                key={font.weight}
                                 className="block hover:shadow p-1 w-full text-left"
-                                style={{ fontWeight: weight }}
-                                onClick={() => onStyleApply('fontWeight', weight)}
+                                style={{ fontWeight: font.weight }}
+                                onClick={() => onStyleApply('fontWeight', font.weight)}
                             >
-                                FONT WEIGHT
+                                {font.name}
                             </button>
                         ))}
                     </div>
@@ -93,20 +114,26 @@ export default function TextStyle() {
                     </div>
                 )}
             </span>
-            <span className="flex gap-x-1">
+            <span className="relative">
                 <Tooltip name="SIZE">
-                    <IconButton className="p-1.5" onClick={() => onStyleApply('fontSize')}>
+                    <IconButton className="p-1.5" onClick={(e) => onOpenClick(e, 'size')}>
                         <RiFontSize2 />
                     </IconButton>
                 </Tooltip>
-                <input
-                    className="w-12 border rounded"
-                    type="number"
-                    min="0"
-                    defaultValue={'0'}
-                    onClick={(e) => e.stopPropagation()}
-                    onChange={(e) => onStyleChange(e, 'fontSize')}
-                ></input>
+                {open.size && (
+                    <div className="absolute whitespace-pre border rounded p-0.5 bg-white z-10">
+                        {fontSizeList.map((font) => (
+                            <button
+                                key={font.size}
+                                className="block hover:shadow p-1 w-full text-left"
+                                style={{ fontWeight: font.size }}
+                                onClick={() => onStyleApply('fontSize', font.size)}
+                            >
+                                {font.name}
+                            </button>
+                        ))}
+                    </div>
+                )}
             </span>
         </>
     );
