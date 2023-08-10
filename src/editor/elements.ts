@@ -82,14 +82,19 @@ export class WrapElement extends BasicElement {
         return { type: 'image', src };
     }
     __addEditable() {
+        const paragraph = this.querySelector('p');
+        if (this.dataset.type !== 'textbox') return;
+        if (!paragraph) return;
         this.addEventListener('dblclick', () => {
-            if (this.dataset.type !== 'textbox') return;
-            this.contentEditable = 'plaintext-only';
+            paragraph.contentEditable = 'plaintext-only';
+            paragraph.focus();
             this.__isEditing = true;
+            this.setAttribute('editing', 'true');
         });
-        this.addEventListener('blur', () => {
-            this.contentEditable = 'inherit';
+        paragraph.addEventListener('blur', () => {
+            paragraph.contentEditable = 'inherit';
             this.__isEditing = false;
+            this.removeAttribute('editing');
         });
     }
     // STYLE
@@ -122,30 +127,57 @@ export class GroupElement extends BasicElement {
 
     constructor() {
         super();
+
+        const dblclickListner = (e: MouseEvent) => {
+            e.stopImmediatePropagation();
+            const target = Array.from(this.children).find((child) => child.contains(e.target as BasicElement)) as BasicElement | null;
+            if (!target) return;
+            target.__addDrag();
+            target.__addRotate();
+            target.__addSize();
+            EE.emit('element:active', [target]);
+
+            const remove = () => {
+                target.__removeDrag();
+                target.__removeRotate();
+                target.__removeSize();
+
+                const children = Array.from(this.children).filter((child) => child instanceof BasicElement) as BasicElement[];
+                const [ox = 0, oy = 0] = pxToNumber(this.style.translate);
+                const bbox = this.__getChildrenBBox(children);
+
+                this.style.translate = `${ox + bbox.x1}px ${oy + bbox.y1}px`;
+                this.style.width = `${bbox.x2 - bbox.x1}px`;
+                this.style.height = `${bbox.y2 - bbox.y1}px`;
+
+                children.forEach((child) => {
+                    const [x = 0, y = 0] = pxToNumber(child.style.translate);
+                    child.style.translate = `${x - bbox.x1}px ${y - bbox.y1}px`;
+                });
+
+                EE.emit('element:active', [this]);
+                EE.off('element:drag:end', remove);
+            };
+
+            EE.on('element:drag:end', remove);
+        };
+
+        this.addEventListener('dblclick', dblclickListner, { capture: true });
     }
 
     __add(elements: BasicElement | BasicElement[], options?: { hasStyle?: boolean }) {
         this.setAttribute('data-type', 'group');
         const children = (Array.isArray(elements) ? elements : [elements]).reverse();
-        const bbox = children.reduce(
-            (p, child) => {
-                child.__removeDrag();
-                child.__removeRotate();
-                child.__removeSize();
 
-                const [x1 = 0, y1 = 0] = pxToNumber(child.style.translate);
-                const x2 = x1 + child.offsetWidth;
-                const y2 = y1 + child.offsetHeight;
-                p.x1 = Math.min(p.x1, x1);
-                p.y1 = Math.min(p.y1, y1);
-                p.x2 = Math.max(p.x2, x2);
-                p.y2 = Math.max(p.y2, y2);
-                this.prepend(child);
+        const bbox = this.__getChildrenBBox(children);
 
-                return p;
-            },
-            { x1: 9999, y1: 9999, x2: 0, y2: 0 }
-        );
+        children.forEach((child) => {
+            child.__removeDrag();
+            child.__removeRotate();
+            child.__removeSize();
+            this.prepend(child);
+        });
+
         if (!options?.hasStyle) {
             this.style.translate = `${bbox.x1 - 1}px ${bbox.y1 - 1}px`;
             this.style.width = `${bbox.x2 - bbox.x1}px`;
@@ -185,4 +217,20 @@ export class GroupElement extends BasicElement {
         }, [] as IElementData[]);
         return { id: this.id, cssText: this.style.cssText, type: 'group', children };
     }
+
+    private __getChildrenBBox = (children: BasicElement[]) =>
+        children.reduce(
+            (p, child) => {
+                const [x1 = 0, y1 = 0] = pxToNumber(child.style.translate);
+                const x2 = x1 + child.offsetWidth;
+                const y2 = y1 + child.offsetHeight;
+                p.x1 = Math.min(p.x1, x1);
+                p.y1 = Math.min(p.y1, y1);
+                p.x2 = Math.max(p.x2, x2);
+                p.y2 = Math.max(p.y2, y2);
+
+                return p;
+            },
+            { x1: 9999, y1: 9999, x2: 0, y2: 0 }
+        );
 }

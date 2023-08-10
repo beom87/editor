@@ -1,7 +1,7 @@
 import EE, { SO } from './events';
 import { BasicElement, GroupElement, WrapElement } from './elements';
 import Effects from './effets';
-import { generateId, isIntersect } from './util';
+import { applyAttribueNS, generateId, isIntersect } from './util';
 import './editor.css';
 import DMKeyboard from './dmKeyboard';
 export type DMElements = WrapElement | GroupElement;
@@ -12,6 +12,7 @@ export default class Editor {
     private _effects: Record<string, Effects> = {};
     private _activeElement: DMElements[] = [];
     private _stackLoad = false;
+    private _grid;
 
     inactiveFocus = () => {};
     inactiveSelection = () => {};
@@ -23,6 +24,7 @@ export default class Editor {
         this.canvas.classList.add('dm-canvas');
         this.canvas.tabIndex = 0;
         this._dmKeyboard = new DMKeyboard(this);
+        this._grid = this._createGridElement();
 
         // import('./editor.css');
 
@@ -197,6 +199,10 @@ export default class Editor {
         this.loadFromJSON(SO.stack[SO.index - 1]);
         this._stackLoad = false;
     }
+    grid() {
+        if (this._grid.isConnected) this._grid.remove();
+        else this.canvas.prepend(this._grid);
+    }
     bringToFront(element: HTMLElement) {
         this.canvas.insertAdjacentElement('beforeend', element);
     }
@@ -221,11 +227,23 @@ export default class Editor {
 
         EE.on('element:active', (elements: DMElements[]) => {
             this._activeElement = elements;
-            this.getElements().forEach((element) => (elements.includes(element) ? element.classList.add('focus') : element.classList.remove('focus')));
+
+            const focus = (element: DMElements) => {
+                elements.includes(element) ? element.classList.add('focus') : element.classList.remove('focus');
+                if (element instanceof GroupElement) (Array.from(element.children) as DMElements[]).forEach(focus);
+            };
+
+            this.getElements().forEach(focus);
         });
         EE.on('element:discardActive', () => {
             this._activeElement = [];
-            this.getElements().forEach((element) => element.classList.remove('focus'));
+
+            const focusout = (element: DMElements) => {
+                element.classList.remove('focus');
+                if (element instanceof GroupElement) (Array.from(element.children) as DMElements[]).forEach(focusout);
+            };
+
+            this.getElements().forEach(focusout);
         });
 
         return () => {
@@ -330,5 +348,26 @@ export default class Editor {
         group.__flipY = !!options?.flipY;
 
         return group;
+    }
+    private _createGridElement() {
+        const grid = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        grid.classList.add('dm-grid');
+        applyAttribueNS(grid, { viewBox: `0 0 ${this.canvas.offsetWidth} ${this.canvas.offsetHeight}`, width: '100%', height: '100%' });
+
+        const [row, col] = [this.canvas.offsetHeight / 10, this.canvas.offsetWidth / 10];
+
+        for (let icol = 0; icol < col + 1; icol++) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            const x = (icol * 10).toString();
+            applyAttribueNS(line, { stroke: 'grey', 'stroke-width': icol % 10 === 0 && icol !== 0 ? '1' : '0.5', x1: x, y1: '0', x2: x, y2: '100%' });
+            grid.appendChild(line);
+        }
+        for (let irow = 0; irow < row + 1; irow++) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            const y = (irow * 10).toString();
+            applyAttribueNS(line, { stroke: 'grey', 'stroke-width': irow % 10 === 0 && irow !== 0 ? '1' : '0.5', x1: '0', y1: y, x2: '100%', y2: y });
+            grid.appendChild(line);
+        }
+        return grid;
     }
 }

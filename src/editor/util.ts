@@ -18,6 +18,13 @@ export const applyStyle = (element: HTMLElement, cssStyle: { [key in keyof CSSSt
     }
     return element;
 };
+export const applyAttribueNS = (element: SVGElement, attribues: { [key: string]: string }) => {
+    for (const key in attribues) {
+        if (Object.prototype.hasOwnProperty.call(attribues, key)) {
+            element.setAttributeNS(null, key, attribues[key]);
+        }
+    }
+};
 
 export const isInsidePoint = (domRect: DOMRect, x: number, y: number) => {
     return x >= domRect.x && x <= domRect.x + domRect.width && y >= domRect.y && y <= domRect.y + domRect.height;

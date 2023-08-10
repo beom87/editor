@@ -138,6 +138,7 @@ export default class Interaction {
         };
 
         const pointerdownListner = (e: PointerEvent) => {
+            e.stopPropagation();
             const isTransform = ['rotate', 'size'].some((c) => (e.target as Element).classList.contains(c));
             if (isTransform || element.__isEditing) return;
             const [translateX = 0, translateY = 0] = pxToNumber(element.style.translate);
