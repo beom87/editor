@@ -8,7 +8,7 @@ import { IconContext } from 'react-icons';
 import ToastMessage from '../components/ToastMessage/ToastMessage';
 import Format from './Format';
 import Canvas from './Canvas';
-import { Vr } from './Authoring.styles';
+import { Hr, Vr } from './Authoring.styles';
 
 export default function Authoring() {
     const canvasRef = useRef<HTMLDivElement>(null);
@@ -41,11 +41,12 @@ export default function Authoring() {
                     <header className="flex p-1 items-center">
                         <Toolbox />
                     </header>
-                    <main className="flex flex-1 gap-x-1">
+                    <Hr />
+                    <main className="flex flex-1 gap-x-1 px-1">
                         <Canvas canvasRef={canvasRef} />
-                        <Vr className="border-gray-300" />
+                        <Vr />
                         <Format />
-                        <Vr className="border-gray-300" />
+                        <Vr />
                         <Animation />
                     </main>
                 </div>

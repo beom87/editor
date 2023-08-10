@@ -11,16 +11,20 @@ export default function Group() {
     const onToGroupClick = () => {
         if (!editor) return;
         const elements = editor.getActiveElements();
-        elements.length !== 0 && editor.toGroup(elements);
+
+        if (elements.length < 2) return;
+        const group = editor.toGroup(elements);
+        editor.activeElements([group]);
     };
 
     const onUngroupClick = () => {
         if (!editor) return;
         const elements = editor.getActiveElements();
-
-        elements.forEach((element) => {
-            if (element instanceof GroupElement) editor.unGroup(element);
-        });
+        if (elements.length !== 1) return;
+        if (elements[0] instanceof GroupElement) {
+            const children = editor.unGroup(elements[0]);
+            children && editor.activeElements(children);
+        }
     };
 
     return (

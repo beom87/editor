@@ -14,7 +14,7 @@ export default function Canvas({ canvasRef }: TCanvasProps) {
     };
 
     return (
-        <div>
+        <div className='min-w-[480px] min-h-[360px] '>
             <div className="text-center">
                 <span>LEFT</span>
                 <span> : </span>

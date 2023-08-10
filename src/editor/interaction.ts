@@ -16,13 +16,13 @@ export default class Interaction {
         let currentId = '';
         const client = { x: 0, y: 0 };
         const offset = { width: 0, height: 0 };
-        const type = element.dataset.type ?? '';
-        const isOneWay = [''].includes(type);
+        // const type = element.dataset.type ?? '';
+        // const isOneWay = [''].includes(type);
 
         const pointermoveListner = (e: PointerEvent) => {
             const dx = currentId === 'dm-bc' ? 0 : e.clientX - client.x;
             const dy = currentId === 'dm-rc' ? 0 : e.clientY - client.y;
-            const dxy = currentId === 'dm-br' && isOneWay && { x: dy * (offset.width / offset.height), y: dy };
+            const dxy = currentId === 'dm-br' && { x: dy * (offset.width / offset.height), y: dy };
 
             element.style.width = offset.width + (dxy ? dxy.x : dx) + 'px';
             element.style.height = offset.height + (dxy ? dxy.y : dy) + 'px';

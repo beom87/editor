@@ -24,6 +24,7 @@ export default function Play() {
         };
         progress.current = requestAnimationFrame(update);
         editor.updateTime(Math.round(Number(timeline.current)));
+        editor.discardActiveElements()
         await Promise.all(editor.play());
         editor.cancel();
 

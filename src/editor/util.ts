@@ -18,7 +18,7 @@ export const applyStyle = (element: HTMLElement, cssStyle: { [key in keyof CSSSt
     }
     return element;
 };
-export const applyAttribueNS = (element: SVGElement, attribues: { [key: string]: string }) => {
+export const applyAttributeNS = (element: SVGElement, attribues: { [key: string]: string }) => {
     for (const key in attribues) {
         if (Object.prototype.hasOwnProperty.call(attribues, key)) {
             element.setAttributeNS(null, key, attribues[key]);

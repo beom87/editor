@@ -12,6 +12,7 @@ import Stack from './Stack';
 import { activeElementsAtom } from '../../atoms/atoms';
 import { useMemo } from 'react';
 import TextStyle from './TextStyle';
+import Grid from './Grid';
 
 export default function Toolbox() {
     const activeElements = useAtomValue(activeElementsAtom);
@@ -22,7 +23,7 @@ export default function Toolbox() {
         <div className="flex gap-x-1">
             <Save />
             <Load />
-            <Preview />
+            <Grid />
             <Vr />
             <Stack />
             <Vr />

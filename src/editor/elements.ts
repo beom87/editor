@@ -81,6 +81,11 @@ export class WrapElement extends BasicElement {
         const src = this.querySelector('img')?.src ?? '';
         return { type: 'image', src };
     }
+    __rect() {
+        const rect = this.querySelector('rect');
+        const attributes = ['fill', 'stroke'].reduce((p, c) => ({ ...p, [c]: rect?.getAttribute(c) ?? '' }), {} as { [key: string]: string });
+        return { type: 'rect', attributes };
+    }
     __addEditable() {
         const paragraph = this.querySelector('p');
         if (this.dataset.type !== 'textbox') return;
@@ -166,7 +171,6 @@ export class GroupElement extends BasicElement {
     }
 
     __add(elements: BasicElement | BasicElement[], options?: { hasStyle?: boolean }) {
-        this.setAttribute('data-type', 'group');
         const children = (Array.isArray(elements) ? elements : [elements]).reverse();
 
         const bbox = this.__getChildrenBBox(children);

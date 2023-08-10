@@ -1,7 +1,7 @@
 import EE, { SO } from './events';
 import { BasicElement, GroupElement, WrapElement } from './elements';
 import Effects from './effets';
-import { applyAttribueNS, generateId, isIntersect } from './util';
+import { applyAttributeNS, generateId, isIntersect } from './util';
 import './editor.css';
 import DMKeyboard from './dmKeyboard';
 export type DMElements = WrapElement | GroupElement;
@@ -57,12 +57,8 @@ export default class Editor {
         group.__add(elements, { hasStyle: !!options?.cssText });
         this.add(group);
 
-        // TODO : 그룹화할 때 개별 요소 이펙트 삭제? 유지?
-        if (Array.isArray(elements)) {
-            elements.forEach((element) => {
-                console.log(this._effects[element.id]);
-            });
-        }
+        if (Array.isArray(elements)) elements.forEach((element) => this._effects[element.id]?.delete());
+        else this._effects[elements.id].delete();
 
         EE.emit('element:group');
         SO.notify();
@@ -80,26 +76,41 @@ export default class Editor {
     }
 
     // ELEMENT CREATOR
-    textbox(text: string, options?: ITextboxOptions) {
+    textbox(options?: ITextboxOptions) {
         const wrap = this._createWrap('textbox', options);
 
         const paragraph = document.createElement('p');
         paragraph.classList.add('element');
-        paragraph.innerHTML = text ?? '';
+        paragraph.innerHTML = options?.text ?? '';
 
         wrap.prepend(paragraph);
         wrap.__addEditable();
         return wrap;
     }
-    image(url: string, options?: IImageOptions) {
+    image(options?: IImageOptions) {
         const wrap = this._createWrap('image', options);
 
         const img = document.createElement('img');
         img.classList.add('element');
-        img.src = url;
+        img.src = options?.src ?? '';
         img.draggable = false;
 
         wrap.prepend(img);
+
+        return wrap;
+    }
+    rect(options?: IRectOptions) {
+        const wrap = this._createWrap('rect', options);
+
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+
+        applyAttributeNS(rect, { x: '0', y: '0', width: '100%', height: '100%', fill: options?.fill ?? '#ffffff', stroke: options?.stroke ?? '#000000' });
+
+        svg.classList.add('element');
+        svg.appendChild(rect);
+
+        wrap.prepend(svg);
 
         return wrap;
     }
@@ -152,9 +163,10 @@ export default class Editor {
         const data = (typeof json !== 'string' ? json : JSON.parse(json)) as { elements: IElementData[]; effects: IEffectData[] };
         const loadElement = (data: IElementData) => {
             let element;
-            if (data.type === 'textbox' && data.text) element = this.textbox(data.text, data);
-            if (data.type === 'image' && data.src) element = this.image(data.src, data);
-            if (data.type === 'group' && data.children) element = this.toGroup(data.children.map(loadElement) as DMElements | DMElements[], data);
+            if (data.type === 'textbox') element = this.textbox(data);
+            if (data.type === 'image') element = this.image(data);
+            if (data.type === 'rect') element = this.rect(data);
+            if (data.type === 'group') element = this.toGroup(data?.children?.map(loadElement) as DMElements | DMElements[], data);
             if (element) this.add(element);
             return element;
         };
@@ -193,6 +205,7 @@ export default class Editor {
         this._stackLoad = false;
     }
     redo() {
+        console.log('redo');
         SO.index += 1;
         this._stackLoad = true;
         this.clear();
@@ -215,9 +228,11 @@ export default class Editor {
     sendBackward(element: HTMLElement) {
         if (element.previousSibling) this.canvas.insertBefore(element, element.previousSibling);
     }
-    activeElements(elements: DMElements[], isActive: boolean) {
-        if (isActive) EE.emit('element:active', elements);
-        else EE.emit('element:discardActive');
+    activeElements(elements: DMElements[]) {
+        EE.emit('element:active', elements);
+    }
+    discardActiveElements() {
+        EE.emit('element:discardActive');
     }
     activeFocus() {
         this.inactiveFocus();
@@ -352,20 +367,20 @@ export default class Editor {
     private _createGridElement() {
         const grid = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         grid.classList.add('dm-grid');
-        applyAttribueNS(grid, { viewBox: `0 0 ${this.canvas.offsetWidth} ${this.canvas.offsetHeight}`, width: '100%', height: '100%' });
+        applyAttributeNS(grid, { viewBox: `0 0 ${this.canvas.offsetWidth} ${this.canvas.offsetHeight}`, width: '100%', height: '100%' });
 
         const [row, col] = [this.canvas.offsetHeight / 10, this.canvas.offsetWidth / 10];
 
         for (let icol = 0; icol < col + 1; icol++) {
             const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             const x = (icol * 10).toString();
-            applyAttribueNS(line, { stroke: 'grey', 'stroke-width': icol % 10 === 0 && icol !== 0 ? '1' : '0.5', x1: x, y1: '0', x2: x, y2: '100%' });
+            applyAttributeNS(line, { stroke: 'grey', 'stroke-width': icol % 10 === 0 && icol !== 0 ? '1' : '0.5', x1: x, y1: '0', x2: x, y2: '100%' });
             grid.appendChild(line);
         }
         for (let irow = 0; irow < row + 1; irow++) {
             const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             const y = (irow * 10).toString();
-            applyAttribueNS(line, { stroke: 'grey', 'stroke-width': irow % 10 === 0 && irow !== 0 ? '1' : '0.5', x1: '0', y1: y, x2: '100%', y2: y });
+            applyAttributeNS(line, { stroke: 'grey', 'stroke-width': irow % 10 === 0 && irow !== 0 ? '1' : '0.5', x1: '0', y1: y, x2: '100%', y2: y });
             grid.appendChild(line);
         }
         return grid;

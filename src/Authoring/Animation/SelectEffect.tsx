@@ -16,14 +16,14 @@ export default function SelectEffect({ onChange: _onChange }: TSelectEffectProps
 
     return (
         <span className="relative">
-            <button className="border p-1 rounded items-center" onClick={onOpenClick}>
+            <button className="border py-1 px-3 rounded items-center" onClick={onOpenClick}>
                 SELECT EFFECT
-                <span className="inline-block w-5 h-5">{open ? <AiOutlineCaretUp className="mt-1" /> : <AiOutlineCaretDown className="mt-1" />}</span>
+                <span className="inline-block w-5 h-5 ml-2">{open ? <AiOutlineCaretUp className="mt-1" /> : <AiOutlineCaretDown className="mt-1" />}</span>
             </button>
             {open && (
-                <ul className="absolute left-1 border rounded p-1 bg-white z-10">
+                <ul className="absolute left-0 right-0 border rounded p-1 bg-white z-10">
                     {effectList.map((effect) => (
-                        <li key={effect.type} className="px-1">
+                        <li key={effect.type} className="px-1 hover:shadow">
                             <button onClick={onChange.bind(null, effect)}>{effect.type.toUpperCase()}</button>
                         </li>
                     ))}

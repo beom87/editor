@@ -13,11 +13,14 @@ export default class DMKeyboard {
     keydownListner = (e: KeyboardEvent) => {
         if (!e) return;
         const { code, metaKey, ctrlKey, shiftKey } = e;
-        if (code === 'KeyC' && (metaKey || ctrlKey)) this.copy();
-        if (code === 'KeyV' && (metaKey || ctrlKey)) this.paste();
-        if (code === 'KeyX' && (metaKey || ctrlKey)) this.cut();
-        if (code === 'KeyG' && (metaKey || ctrlKey)) e.preventDefault(), this.toGroup();
-        if (code === 'KeyG' && shiftKey && (metaKey || ctrlKey)) this.ungroup();
+        const mectKey = metaKey || ctrlKey;
+        if (code === 'KeyC' && mectKey) this.copy();
+        if (code === 'KeyV' && mectKey) this.paste();
+        if (code === 'KeyX' && mectKey) this.cut();
+        if (code === 'KeyG' && !shiftKey && mectKey) e.preventDefault(), this.toGroup();
+        if (code === 'KeyG' && shiftKey && mectKey) this.ungroup();
+        if (code === 'KeyZ' && !shiftKey && mectKey) e.preventDefault(), this.editor.undo();
+        if (code === 'KeyZ' && shiftKey && mectKey) e.preventDefault(), this.editor.redo();
     };
 
     copy() {
@@ -55,14 +58,14 @@ export default class DMKeyboard {
         const activeElements = this.editor.getActiveElements();
         if (activeElements.length < 2) return;
         const group = this.editor.toGroup(activeElements);
-        this.editor.activeElements([group], true);
+        this.editor.activeElements([group]);
     }
     ungroup() {
         const activeElements = this.editor.getActiveElements();
         if (activeElements.length !== 1) return;
         if (activeElements[0] instanceof GroupElement) {
             const children = this.editor.unGroup(activeElements[0]);
-            children && this.editor.activeElements(children, true);
+            children && this.editor.activeElements(children);
         }
     }
 

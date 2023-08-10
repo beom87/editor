@@ -11,21 +11,21 @@ interface IElementOptions {
 }
 
 interface IWrapElementOptions extends IElementOptions {}
-
-interface ITextboxOptions extends IElementOptions {}
-
-interface IImageOptions extends IElementOptions {}
-
 interface IGroupElementOptions extends IElementOptions {}
 
-interface IElementData {
-    id?: string;
+interface ITextboxOptions extends IElementOptions {
     text?: string;
-    type?: string;
-    cssText?: string;
+}
+interface IImageOptions extends IElementOptions {
     src?: string;
-    filpX?: boolean;
-    flipY?: boolean;
+}
+interface IRectOptions extends IElementOptions {
+    fill?: string;
+    stroke?: string;
+}
+
+interface IElementData extends IElementOptions {
+    type?: string;
     children?: IElementData[];
 }
 
@@ -34,7 +34,7 @@ interface IEffectData {
     animation?: { keyframes: Keyframe[] | PropertyIndexedKeyframes; options: KeyframeEffectOptions }[];
 }
 
-type TDataMap = { textbox: '__textbox'; image: '__image' };
+type TDataMap = { textbox: '__textbox'; image: '__image'; rect: '__rect' };
 
 // Event Emitter
 // basic
