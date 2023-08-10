@@ -32,7 +32,7 @@ export default function EffectOptions({ element }: { element: DMElements }) {
         const type = animation.__type?.toUpperCase() ?? '';
 
         return (
-            <div key={animation.__id} className="flex">
+            <div key={animation.__id} className="flex flex-wrap">
                 <div className="w-[160px] max-w-[160px]">
                     {animation.__type === 'rotate' && <RotateOptions type={type} animation={animation} />}
                     {animation.__type === 'move' && <MoveOptions type={type} animation={animation} />}
@@ -40,10 +40,10 @@ export default function EffectOptions({ element }: { element: DMElements }) {
                     {animation.__type === 'fadeIn' && <FadeOptions type={type} />}
                     {animation.__type === 'fadeOut' && <FadeOptions type={type} />}
                 </div>
-                <div className="flex-[1] px-2 py-2">
-                    <MultiRange min={0} max={10000} value={value} onChange={(min, max) => onTilmelineChange(animation, { min, max })} />
-                </div>
-                <div>
+                <div className="flex-[1] px-2 min-w-[300px] flex gap-x-1 select-none">
+                    <div className="flex-1 pt-1.5">
+                        <MultiRange min={0} max={15000} value={value} onChange={(min, max) => onTilmelineChange(animation, { min, max })} />
+                    </div>
                     <IconButton onClick={onRemoveClick.bind(null, animation)}>
                         <BsTrash />
                     </IconButton>

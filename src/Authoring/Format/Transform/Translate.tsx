@@ -22,11 +22,11 @@ export default function Translate() {
     return (
         <div className="flex mt-1 gap-x-4">
             <div>
-                <label className="px-1 w-24 inline-block">translate-x</label>
+                <label className="px-1 w-24 inline-block font-semibold">LEFT</label>
                 <input className="px-1 w-24 border rounded" type="number" min="0" value={x} onChange={onChange.bind(null, 'x')}></input>
             </div>
             <div>
-                <label className="px-1 w-24 inline-block">translate-y</label>
+                <label className="px-1 w-24 inline-block font-semibold">TOP</label>
                 <input className="px-1 w-24 border rounded" type="number" min="0" value={y} onChange={onChange.bind(null, 'y')}></input>
             </div>
         </div>

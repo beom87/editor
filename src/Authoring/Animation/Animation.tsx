@@ -42,17 +42,17 @@ export default function Animation() {
     }, [editor]);
 
     return (
-        <>
+        <div className='flex-1'>
             <Play />
             {elements?.map((element, index) => (
                 <div key={element.id + index} className="border rounded p-1" onClick={() => onEffectListClick(element)}>
                     <div className="mx-1 text-bold text-lg">
-                        <span className="text-red-300 w-40 inline-block">{element.dataset.type?.toUpperCase()}</span>
+                        <span className="text-red-300 w-40 inline-block mr-1">{element.dataset.type?.toUpperCase()}</span>
                         <SelectEffect onChange={(effect) => onEffectChange(element, effect)} />
                     </div>
                     <EffectOptions element={element} />
                 </div>
             ))}
-        </>
+        </div>
     );
 }

@@ -3,11 +3,12 @@ import { activeElementsAtom, authoringEditorAtom } from '../atoms/atoms';
 import { useEffect, useRef } from 'react';
 import Editor, { DMElements } from '../editor/core';
 import Toolbox from './Toolbox';
-import View from './View';
 import Animation from './Animation';
 import { IconContext } from 'react-icons';
 import ToastMessage from '../components/ToastMessage/ToastMessage';
-import Format from './Format/Format';
+import Format from './Format';
+import Canvas from './Canvas';
+import { Vr } from './Authoring.styles';
 
 export default function Authoring() {
     const canvasRef = useRef<HTMLDivElement>(null);
@@ -40,18 +41,13 @@ export default function Authoring() {
                     <header className="flex p-1 items-center">
                         <Toolbox />
                     </header>
-                    <main className="flex">
-                        <div className="flex-[1] border p-1">
-                            <View />
-                        </div>
-                        <div ref={canvasRef} className="w-[800px] h-[500px] min-w-[800px] min-h-[500px] border rounded"></div>
-                        <div className="flex-[1.5] border p-1">
-                            <Format />
-                        </div>
-                    </main>
-                    <footer className="flex-[1] overflow-auto p-1">
+                    <main className="flex flex-1 gap-x-1">
+                        <Canvas canvasRef={canvasRef} />
+                        <Vr className="border-gray-300" />
+                        <Format />
+                        <Vr className="border-gray-300" />
                         <Animation />
-                    </footer>
+                    </main>
                 </div>
             </ToastMessage>
         </IconContext.Provider>

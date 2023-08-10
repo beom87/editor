@@ -44,10 +44,10 @@ export default function Play() {
             </button>
             <div className="flex-[1]">
                 <div>
-                    <input className="w-full" type="range" min="0" max="10000" value={value} disabled onChange={() => {}}></input>
+                    <input className="w-full" type="range" min="0" max="15000" value={value} disabled onChange={() => {}}></input>
                 </div>
                 <div>
-                    <input className="w-full" type="range" min="0" max="10000" defaultValue={'0'} disabled={value !== '0'} onChange={onTimelineChange}></input>
+                    <input className="w-full" type="range" min="0" max="15000" defaultValue={'0'} disabled={value !== '0'} onChange={onTimelineChange}></input>
                 </div>
             </div>
             <div className="pr-1">

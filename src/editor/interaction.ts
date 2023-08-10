@@ -118,10 +118,10 @@ export default class Interaction {
             // TODO : rotate값만큼 limit값 조절해줄 필요성이 있음
             const limit = 20;
 
-            translate.x = Math.round(Math.max(-offsetWidth + limit, Math.min(dx + origin.x, this.area.width - limit)));
-            translate.y = Math.round(Math.max(-offsetHeight + limit, Math.min(dy + origin.y, this.area.height - limit)));
+            translate.x = Math.max(-offsetWidth + limit, Math.min(dx + origin.x, this.area.width - limit));
+            translate.y = Math.max(-offsetHeight + limit, Math.min(dy + origin.y, this.area.height - limit));
 
-            element.style.translate = `${translate.x}px ${translate.y}px`;
+            element.style.translate = `${translate.x.toFixed(2)}px ${translate.y.toFixed(2)}px`;
 
             EE.emit('element:drag', [element]);
         };

@@ -28,11 +28,11 @@ export default function Size() {
     return (
         <div className="flex mt-1 gap-x-4">
             <div>
-                <label className="px-1 w-24 inline-block">width</label>
+                <label className="px-1 w-24 inline-block font-semibold">WIDTH</label>
                 <input className="px-1 w-24 border rounded" type="number" min="0" value={width} onChange={onChange.bind(null, 'width')}></input>
             </div>
             <div>
-                <label className="px-1 w-24 inline-block">height</label>
+                <label className="px-1 w-24 inline-block font-semibold">HEIGHT</label>
                 <input className="px-1 w-24  border rounded" type="number" min="0" value={height} onChange={onChange.bind(null, 'height')}></input>
             </div>
         </div>

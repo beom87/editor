@@ -20,7 +20,7 @@ export default function Rotate() {
     return (
         <div className="flex mt-1 gap-x-4">
             <div>
-                <label className="px-1 w-24 inline-block">degree</label>
+                <label className="px-1 w-24 inline-block font-semibold">DEGREE</label>
                 <input className="px-1 w-24 border rounded" type="number" min="0" value={deg} onChange={onChange}></input>
             </div>
         </div>

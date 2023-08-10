@@ -75,8 +75,8 @@ export default function MultiRange({ min = 0, max = 1000, value: _value, onChang
                             right: ((normalize.max - Math.max(value.thumb1, value.thumb2)) / normalize.max) * 100 + '%'
                         }}
                     >
-                        <div className="-translate-y-6 border rounded-full">{Math.min(value.thumb1, value.thumb2)}</div>
-                        {value.thumb1 !== value.thumb2 && <div className="-translate-y-6 border rounded-full">{Math.max(value.thumb1, value.thumb2)}</div>}
+                        <div className="-translate-y-6 border rounded-full h-6">{Math.min(value.thumb1, value.thumb2).toLocaleString()}</div>
+                        {value.thumb1 !== value.thumb2 && <div className="-translate-y-6 border rounded-full h-6">{Math.max(value.thumb1, value.thumb2).toLocaleString()}</div>}
                     </div>
                 )}
                 <input

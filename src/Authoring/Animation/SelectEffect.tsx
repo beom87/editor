@@ -16,7 +16,7 @@ export default function SelectEffect({ onChange: _onChange }: TSelectEffectProps
 
     return (
         <span className="relative">
-            <button className="border p-1 mx-1 rounded items-center" onClick={onOpenClick}>
+            <button className="border p-1 rounded items-center" onClick={onOpenClick}>
                 SELECT EFFECT
                 <span className="inline-block w-5 h-5">{open ? <AiOutlineCaretUp className="mt-1" /> : <AiOutlineCaretDown className="mt-1" />}</span>
             </button>

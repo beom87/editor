@@ -10,7 +10,7 @@ export const IconButton = ({ children, className, ...props }: TButtonProps) => (
     </button>
 );
 
-export const Vr = ({ className }: THTMLProps) => <div className={classNames(className, 'border border-slate-400')}></div>;
+export const Vr = ({ className, ...props }: THTMLProps) => <div className={classNames('border border-slate-400', className)} {...props}></div>;
 
 export const Tooltip = ({
     name,
