@@ -58,7 +58,7 @@ $ npm run dev
 | main.tsx       | entry                          |
 | AnimationModal | Animation 설정 Component       |
 | Toolbox        | Toolbox Component              |
-| SideContainer  | Fortmat 등 세부 설정 Component |
+| SideContainer  | Format 등 세부 설정 Component |
 
 <br/>
 
