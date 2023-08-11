@@ -1,4 +1,4 @@
-# SOL-B1-AUTHORING
+# Animation
 
 -   CSS Keyframe 기반 원리 동영상 저작 도구
 
