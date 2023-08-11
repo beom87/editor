@@ -5,7 +5,8 @@ import { IconButton, Tooltip } from '../Authoring.styles';
 import { useAtomValue } from 'jotai';
 import { activeElementsAtom } from '../../atoms/atoms';
 import { WrapElement } from '../../editor/elements';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import ColorPicker from '../../components/ColorPicker/ColorPicker';
 
 const initialOpenState = { weight: false, color: false, size: false };
 const fontWeightList = [
@@ -35,24 +36,16 @@ const fontSizeList = [
 export default function TextStyle() {
     const activeElement = useAtomValue(activeElementsAtom)?.[0];
     const [open, setOpen] = useState(initialOpenState);
-    const [style, setStyle] = useState({ color: '#ff0000' });
-    const range = useRef<Range>();
+    // const range = useRef<Range>();
 
     const onOpenClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, type: keyof typeof initialOpenState) => {
         e.stopPropagation();
         setOpen((prev) => ({ ...initialOpenState, [type]: !prev[type] }));
     };
 
-    const onStyleChange = (e: React.ChangeEvent<HTMLInputElement>, type: keyof typeof style) => {
-        const isPX = ['fontSize'].includes(type);
-        const suffix = isPX ? 'px' : '';
-        setStyle((prev) => ({ ...prev, [type]: e.target.value + suffix }));
-    };
-
-    const onStyleApply = (type: 'fontWeight' | 'color' | 'fontSize', value?: string) => {
+    const onStyleApply = (type: 'fontWeight' | 'color' | 'fontSize', value: string) => {
         if (!activeElement || activeElement.dataset.type !== 'textbox' || !(activeElement instanceof WrapElement)) return;
         if (value) activeElement.__setTextStyle({ [type]: value });
-        else activeElement.__setTextStyle({ [type]: style?.[type as keyof typeof style] });
     };
 
     useEffect(() => {
@@ -65,16 +58,16 @@ export default function TextStyle() {
         };
     }, []);
 
-    useEffect(() => {
-        const pointerupListner = () => {
-            const selection = document.getSelection();
-            range.current = selection?.getRangeAt(0);
-        };
-        activeElement?.addEventListener('pointerup', pointerupListner);
-        return () => {
-            activeElement?.removeEventListener('pointerup', pointerupListner);
-        };
-    }, [activeElement]);
+    // useEffect(() => {
+    //     const pointerupListner = () => {
+    //         const selection = document.getSelection();
+    //         range.current = selection?.getRangeAt(0);
+    //     };
+    //     activeElement?.addEventListener('pointerup', pointerupListner);
+    //     return () => {
+    //         activeElement?.removeEventListener('pointerup', pointerupListner);
+    //     };
+    // }, [activeElement]);
 
     return (
         <>
@@ -106,11 +99,8 @@ export default function TextStyle() {
                     </IconButton>
                 </Tooltip>
                 {open.color && (
-                    <div className="absolute z-10 border rounded p-0.5 bg-white flex items-center gap-x-2">
-                        <input type="color" value={style.color} onChange={(e) => onStyleChange(e, 'color')} onClick={(e) => e.stopPropagation()}></input>
-                        <button type="submit" className="border rounded p-0.5" onClick={() => onStyleApply('color')}>
-                            APPLY
-                        </button>
+                    <div className="absolute">
+                        <ColorPicker onColorChange={(color) => onStyleApply('color', color)} />
                     </div>
                 )}
             </span>
