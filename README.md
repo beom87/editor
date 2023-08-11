@@ -48,16 +48,16 @@ $ npm run dev
 
 # Project Structure
 
-| 이름           | 설명                           |
-| -------------- | ------------------------------ |
-| apis           | 서버 통신 관련 함수 모음       |
-| components     | 공통 Components                |
-| editor         | 저작 도구 Library              |
-| hooks          | 공통 Hooks                     |
-| utils          | 유틸성 함수 모음               |
-| main.tsx       | entry                          |
-| AnimationModal | Animation 설정 Component       |
-| Toolbox        | Toolbox Component              |
+| Name           | Description                   |
+| -------------- | ----------------------------- |
+| apis           | 서버 통신 관련 함수 모음      |
+| components     | 공통 Components               |
+| editor         | 저작 도구 Library             |
+| hooks          | 공통 Hooks                    |
+| utils          | 유틸성 함수 모음              |
+| main.tsx       | entry                         |
+| AnimationModal | Animation 설정 Component      |
+| Toolbox        | Toolbox Component             |
 | SideContainer  | Format 등 세부 설정 Component |
 
 <br/>
@@ -66,7 +66,7 @@ $ npm run dev
 
 **지원하는 기능**
 
-| 기능            | 설명                                               |
+| Function        | Description                                        |
 | --------------- | -------------------------------------------------- |
 | Import & Export | 저장 및 불러오기                                   |
 | Interaction     | Drag, Size, Rotate, etc...                         |
