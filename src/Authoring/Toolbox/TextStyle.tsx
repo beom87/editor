@@ -5,7 +5,7 @@ import { IconButton, Tooltip } from '../Authoring.styles';
 import { useAtomValue } from 'jotai';
 import { activeElementsAtom } from '../../atoms/atoms';
 import { WrapElement } from '../../editor/elements';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ColorPicker from '../../components/ColorPicker/ColorPicker';
 
 const initialOpenState = { weight: false, color: false, size: false };
@@ -36,7 +36,7 @@ const fontSizeList = [
 export default function TextStyle() {
     const activeElement = useAtomValue(activeElementsAtom)?.[0];
     const [open, setOpen] = useState(initialOpenState);
-    // const range = useRef<Range>();
+    const range = useRef<Range>();
 
     const onOpenClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, type: keyof typeof initialOpenState) => {
         e.stopPropagation();
@@ -58,16 +58,16 @@ export default function TextStyle() {
         };
     }, []);
 
-    // useEffect(() => {
-    //     const pointerupListner = () => {
-    //         const selection = document.getSelection();
-    //         range.current = selection?.getRangeAt(0);
-    //     };
-    //     activeElement?.addEventListener('pointerup', pointerupListner);
-    //     return () => {
-    //         activeElement?.removeEventListener('pointerup', pointerupListner);
-    //     };
-    // }, [activeElement]);
+    useEffect(() => {
+        const pointerupListner = () => {
+            const selection = document.getSelection();
+            range.current = selection?.getRangeAt(0);
+        };
+        activeElement?.addEventListener('pointerup', pointerupListner);
+        return () => {
+            activeElement?.removeEventListener('pointerup', pointerupListner);
+        };
+    }, [activeElement]);
 
     return (
         <>
@@ -99,7 +99,7 @@ export default function TextStyle() {
                     </IconButton>
                 </Tooltip>
                 {open.color && (
-                    <div className="absolute">
+                    <div className="absolute" onClick={(e) => e.stopPropagation()}>
                         <ColorPicker onColorChange={(color) => onStyleApply('color', color)} />
                     </div>
                 )}
