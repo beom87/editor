@@ -71,6 +71,6 @@ $ npm run dev
 | Import & Export | 저장 및 불러오기                                   |
 | Interaction     | Drag, Size, Rotate, etc...                         |
 | Elements        | Image, Sprite, Textbox, Rect, etc...               |
-| Function        | Undo, Redo, To Group, Ungroup, Grid, Order, etc... |
+| Features        | Undo, Redo, To Group, Ungroup, Grid, Order, etc... |
 | Animation       | 재생, 역재생, 배속, 시간별 재생, etc...            |
 | Effect          | Move, Rotate, Scale, Fade In, Fade Out, etc...     |
