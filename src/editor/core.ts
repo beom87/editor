@@ -131,6 +131,9 @@ export default class Editor {
     cancel() {
         this.getEffects().forEach((effect) => effect.cancel());
     }
+    speed(speed: number) {
+        this.getEffects().forEach((effect) => effect.speed(speed));
+    }
     updateTime(time: number) {
         this.getEffects().forEach((effect) => effect.updateTime(time));
     }
@@ -205,7 +208,6 @@ export default class Editor {
         this._stackLoad = false;
     }
     redo() {
-        console.log('redo');
         SO.index += 1;
         this._stackLoad = true;
         this.clear();

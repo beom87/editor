@@ -9,7 +9,7 @@ export default function Save() {
     const onClick = () => {
         if (!editor) return;
         const data = editor.toData();
-        window.localStorage.setItem('preAu', JSON.stringify(data));
+        window.localStorage.setItem('SAMPLE', JSON.stringify(data));
     };
     return (
         <Tooltip name="SAVE">

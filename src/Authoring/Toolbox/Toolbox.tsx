@@ -5,7 +5,7 @@ import Group from './Group';
 import Insert from './Insert';
 import Load from './Load';
 import Order from './Order';
-import Preview from './Preview';
+import Preview from './Preivew';
 import Remove from './Remove';
 import Save from './Save';
 import Stack from './Stack';
@@ -23,6 +23,7 @@ export default function Toolbox() {
         <div className="flex gap-x-1">
             <Save />
             <Load />
+            <Preview />
             <Grid />
             <Vr />
             <Stack />

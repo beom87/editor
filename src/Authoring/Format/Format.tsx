@@ -2,7 +2,6 @@ import { useAtomValue } from 'jotai';
 import { activeElementsAtom } from '../../atoms/atoms';
 import { useState } from 'react';
 import Transform from './Transform';
-// import TextStyle from './TextStyle';
 
 export default function Format() {
     const activeElement = useAtomValue(activeElementsAtom);
@@ -20,9 +19,6 @@ export default function Format() {
             <div className="border rounded py-1">
                 <Transform open={open.transform} onOpenClick={() => onOpenClick('transform')} />
             </div>
-            {/* <div className="border rounded py-1 min-w-[400px] mt-1"> */}
-            {/* <TextStyle open={open.textStyle} onOpenClick={() => onOpenClick('textStyle')} /> */}
-            {/* </div> */}
         </div>
     );
 }

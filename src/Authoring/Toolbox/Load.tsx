@@ -8,7 +8,7 @@ export default function Load() {
     const onClick = () => {
         if (!editor) return;
         editor.clear();
-        editor.loadFromJSON(window.localStorage.getItem('preAu') ?? '');
+        editor.loadFromJSON(window.localStorage.getItem('SAMPLE') ?? '');
     };
     return (
         <Tooltip name="LOAD">

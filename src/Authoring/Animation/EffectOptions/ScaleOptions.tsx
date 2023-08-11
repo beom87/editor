@@ -19,8 +19,6 @@ export default function ScaleOptions({ type, animation }: TScaleOptionsProps) {
         animation.effect.setKeyframes([{ ...keyframe, scale }]);
     };
 
-    console.log(origin.current.scale?.toString());
-
     return (
         <>
             <button className="p-1 w-full flex items-center gap-x-1 justify-between" onClick={onOpenClick}>

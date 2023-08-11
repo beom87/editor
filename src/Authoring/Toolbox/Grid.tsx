@@ -10,7 +10,7 @@ export default function Grid() {
         editor.grid();
     };
     return (
-        <Tooltip name="LOAD">
+        <Tooltip name="GRID">
             <IconButton className="p-1.5" onClick={onClick}>
                 <MdGrid4X4 />
             </IconButton>
