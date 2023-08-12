@@ -3,8 +3,6 @@
 -   Web Animations API 기반 Animation 저작 도구
 -   Animation & KeyframeEffect
 
-<br/>
-
 # Getting Started
 
 **Requirements**
@@ -22,8 +20,6 @@ $ npm ci
 $ npm run dev
 ```
 
-<br/>
-
 # Stacks
 
 **Environment**  
@@ -40,20 +36,17 @@ $ npm run dev
 ![DMEditor](https://img.shields.io/badge/DMEditor-%23D90007.svg?style=for-the-badge)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 
-<br/>
-
 # Project Structure
 
-| Name       | Description                                                 |
-| ---------- | ----------------------------------------------------------- |
-| assets     | styles, images, sounds, etc...                              |
-| atoms      | jotai(전역 상태 관리)                                       |
-| Authoring  | 저작 도구 Components<br/>Toolbox, Canvas, Format, Animation |
-| components | 공통 Components                                             |
-| editor     | 저작 도구 Library                                           |
-| main.tsx   | entry                                                       |
-
-<br/>
+| Name                                  | Description                                                            |
+| ------------------------------------- | ---------------------------------------------------------------------- |
+| assets                                | styles, images, sounds, etc...                                         |
+| atoms                                 | jotai(전역 상태 관리)                                                  |
+| Authoring                             | 저작 도구 Components<br />- Toolbox, Canvas, Format, Animation         |
+| Authoring<br />- Authoring.styles.tsx | Authoring 공통 Components<br />- IconButton, Tooltip, Collapse, etc... |
+| components                            | 공통 Components<br />- ColorPicker, MultiRange, ToastMessage, etc...   |
+| editor                                | 저작 도구 Library                                                      |
+| main.tsx                              | entry                                                                  |
 
 # Editor
 

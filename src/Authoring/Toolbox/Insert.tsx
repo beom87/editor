@@ -15,7 +15,7 @@ export default function Insert() {
         fileReader.onload = () => {
             if (!editor) return;
             const image = editor.image({ src: fileReader.result as string });
-            editor?.add(image);
+            editor.add(image);
         };
     };
 

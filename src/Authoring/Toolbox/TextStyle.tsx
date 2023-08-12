@@ -45,7 +45,7 @@ export default function TextStyle() {
 
     const onStyleApply = (type: 'fontWeight' | 'color' | 'fontSize', value: string) => {
         if (!activeElement || activeElement.dataset.type !== 'textbox' || !(activeElement instanceof WrapElement)) return;
-        if (value) activeElement.__setTextStyle({ [type]: value });
+        activeElement.__setTextStyle({ [type]: value });
     };
 
     useEffect(() => {
