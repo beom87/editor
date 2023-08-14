@@ -1,7 +1,7 @@
 import EE, { SO } from './events';
 import { BasicElement, GroupElement, WrapElement } from './elements';
 import Effects from './effets';
-import { applyAttributeNS, generateId, isIntersect } from './util';
+import { applyAttributeNS, applyStyle, generateId, isIntersect } from './util';
 import './editor.css';
 import DMKeyboard from './dmKeyboard';
 export type DMElements = WrapElement | GroupElement;
@@ -101,11 +101,22 @@ export default class Editor {
     }
     rect(options?: IRectOptions) {
         const wrap = this._createWrap('rect', options);
-
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 
-        applyAttributeNS(rect, { x: '0', y: '0', fill: '#fff', stroke: '#000000', width: '100%', height: '100%', ...(options?.attributes ?? {}) });
+        if (!wrap.style.width) wrap.style.width = '100px';
+        if (!wrap.style.height) wrap.style.height = '100px';
+
+        applyStyle(svg, { overflow: 'visible' });
+        applyAttributeNS(rect, {
+            x: '5%',
+            y: '5%',
+            fill: '#fff',
+            stroke: '#000000',
+            width: '90%',
+            height: '90%',
+            ...(options?.attributes ?? {})
+        });
         svg.classList.add('element');
         svg.appendChild(rect);
 
@@ -116,15 +127,17 @@ export default class Editor {
 
     circle(options?: ICircleOptions) {
         const wrap = this._createWrap('circle', options);
-
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         const rect = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
 
+        if (!wrap.style.width) wrap.style.width = '100px';
+        if (!wrap.style.height) wrap.style.height = '100px';
+        applyStyle(svg, { overflow: 'visible' });
         applyAttributeNS(rect, {
             cx: '50%',
             cy: '50%',
-            rx: '50%',
-            ry: '50%',
+            rx: '45%',
+            ry: '45%',
             fill: '#fff',
             stroke: '#000000',
             ...(options?.attributes ?? {})

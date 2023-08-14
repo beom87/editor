@@ -90,17 +90,25 @@ export class WrapElement extends BasicElement {
         const paragraph = this.querySelector('p');
         if (this.dataset.type !== 'textbox') return;
         if (!paragraph) return;
-        this.addEventListener('dblclick', () => {
-            paragraph.contentEditable = 'plaintext-only';
-            paragraph.focus();
-            this.__isEditing = true;
-            this.setAttribute('editing', 'true');
-        });
-        paragraph.addEventListener('blur', () => {
-            paragraph.contentEditable = 'inherit';
-            this.__isEditing = false;
-            this.removeAttribute('editing');
-        });
+
+        this.addEventListener('dblclick', () => this.__activeEditable());
+        paragraph.addEventListener('blur', () => this.__inactiveEditable());
+    }
+
+    __activeEditable() {
+        const paragraph = this.querySelector('p');
+        if (!paragraph) return;
+        paragraph.contentEditable = 'plaintext-only';
+        paragraph.focus();
+        this.__isEditing = true;
+        this.setAttribute('editing', 'true');
+    }
+    __inactiveEditable() {
+        const paragraph = this.querySelector('p');
+        if (!paragraph) return;
+        paragraph.contentEditable = 'inherit';
+        this.__isEditing = false;
+        this.removeAttribute('editing');
     }
     // STYLE
     __setTextStyle(cssStyle: { [key in keyof CSSStyleDeclaration]?: string }) {
@@ -137,12 +145,14 @@ export class GroupElement extends BasicElement {
             e.stopImmediatePropagation();
             const target = Array.from(this.children).find((child) => child.contains(e.target as BasicElement)) as BasicElement | null;
             if (!target) return;
+            if (target instanceof WrapElement) target.__activeEditable();
             target.__addDrag();
             target.__addRotate();
             target.__addSize();
             EE.emit('element:active', [target]);
 
             const remove = () => {
+                if (target instanceof WrapElement) target.__inactiveEditable();
                 target.__removeDrag();
                 target.__removeRotate();
                 target.__removeSize();

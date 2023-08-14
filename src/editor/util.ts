@@ -10,7 +10,7 @@ export const flipToNumber = (flip: boolean) => (flip ? -1 : 1);
 export const generateId = () => customAlphabet('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 8)();
 
 // ELEMENT
-export const applyStyle = (element: HTMLElement, cssStyle: { [key in keyof CSSStyleDeclaration]?: string }, options?: { value?: string }) => {
+export const applyStyle = (element: HTMLElement | SVGElement, cssStyle: { [key in keyof CSSStyleDeclaration]?: string }, options?: { value?: string }) => {
     for (const key in cssStyle) {
         if (Object.prototype.hasOwnProperty.call(cssStyle, key)) {
             element.style[key] = options?.value ?? cssStyle[key] ?? element.style[key];
