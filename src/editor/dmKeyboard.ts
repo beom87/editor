@@ -35,18 +35,19 @@ export default class DMKeyboard {
             p.push(c.toData());
             return p;
         }, [] as IEffectData[]);
-        elementData.forEach((data) => {
-            const id = generateId();
-            const effect = effectsData.find((effect) => effect.id === data.id);
-            if (effect) effect.id = id;
-            data.id = id;
-        });
 
         const r = { elements: elementData, effects: effectsData };
 
         this._clip = JSON.stringify(r);
     }
     paste() {
+        const clip = JSON.parse(this._clip) as { elements: IElementData[]; effects: IEffectData[] };
+        clip.elements.forEach((data) => {
+            const id = generateId();
+            const effect = clip.effects.find((effect) => effect.id === data.id);
+            if (effect) effect.id = id;
+            data.id = id;
+        });
         this.editor.loadFromJSON(this._clip);
     }
     cut() {

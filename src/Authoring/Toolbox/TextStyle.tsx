@@ -1,7 +1,7 @@
 import { MdOutlineFormatBold } from 'react-icons/md';
 import { BiFontColor } from 'react-icons/bi';
 import { RiFontSize2 } from 'react-icons/ri';
-import { IconButton, Tooltip } from '../Authoring.styles';
+import { IconButton, ListItem, Tooltip } from '../Authoring.styles';
 import { useAtomValue } from 'jotai';
 import { activeElementsAtom } from '../../atoms/atoms';
 import { WrapElement } from '../../editor/elements';
@@ -48,6 +48,7 @@ export default function TextStyle() {
         activeElement.__setTextStyle({ [type]: value });
     };
 
+    // BLUR HOOK
     useEffect(() => {
         const listner = () => {
             setOpen(initialOpenState);
@@ -58,6 +59,7 @@ export default function TextStyle() {
         };
     }, []);
 
+    // TESTING.....
     useEffect(() => {
         const pointerupListner = () => {
             const selection = document.getSelection();
@@ -80,14 +82,9 @@ export default function TextStyle() {
                 {open.weight && (
                     <div className="absolute whitespace-pre border rounded p-0.5 bg-white z-10">
                         {fontWeightList.map((font) => (
-                            <button
-                                key={font.weight}
-                                className="block hover:shadow p-1 w-full text-left"
-                                style={{ fontWeight: font.weight }}
-                                onClick={() => onStyleApply('fontWeight', font.weight)}
-                            >
+                            <ListItem key={font.weight} style={{ fontWeight: font.weight }} onClick={() => onStyleApply('fontWeight', font.weight)}>
                                 {font.name}
-                            </button>
+                            </ListItem>
                         ))}
                     </div>
                 )}
@@ -113,14 +110,9 @@ export default function TextStyle() {
                 {open.size && (
                     <div className="absolute whitespace-pre border rounded p-0.5 bg-white z-10">
                         {fontSizeList.map((font) => (
-                            <button
-                                key={font.size}
-                                className="block hover:shadow p-1 w-full text-left"
-                                style={{ fontWeight: font.size }}
-                                onClick={() => onStyleApply('fontSize', font.size)}
-                            >
+                            <ListItem key={font.size} style={{ fontWeight: font.size }} onClick={() => onStyleApply('fontSize', font.size)}>
                                 {font.name}
-                            </button>
+                            </ListItem>
                         ))}
                     </div>
                 )}

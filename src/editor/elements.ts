@@ -83,7 +83,7 @@ export class WrapElement extends BasicElement {
     }
     __rect() {
         const rect = this.querySelector('rect');
-        const attributes = ['fill', 'stroke'].reduce((p, c) => ({ ...p, [c]: rect?.getAttribute(c) ?? '' }), {} as { [key: string]: string });
+        const attributes = rect?.getAttributeNames().reduce((p, c) => ({ ...p, [c]: rect?.getAttribute(c) ?? '' }), {} as { [key: string]: string });
         return { type: 'rect', attributes };
     }
     __addEditable() {

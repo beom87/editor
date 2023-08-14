@@ -105,8 +105,30 @@ export default class Editor {
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 
-        applyAttributeNS(rect, { x: '0', y: '0', width: '100%', height: '100%', fill: options?.fill ?? '#ffffff', stroke: options?.stroke ?? '#000000' });
+        applyAttributeNS(rect, { x: '0', y: '0', fill: '#fff', stroke: '#000000', width: '100%', height: '100%', ...(options?.attributes ?? {}) });
+        svg.classList.add('element');
+        svg.appendChild(rect);
 
+        wrap.prepend(svg);
+
+        return wrap;
+    }
+
+    circle(options?: ICircleOptions) {
+        const wrap = this._createWrap('circle', options);
+
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+
+        applyAttributeNS(rect, {
+            cx: '50%',
+            cy: '50%',
+            rx: '50%',
+            ry: '50%',
+            fill: '#fff',
+            stroke: '#000000',
+            ...(options?.attributes ?? {})
+        });
         svg.classList.add('element');
         svg.appendChild(rect);
 

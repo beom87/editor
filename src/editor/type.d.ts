@@ -20,8 +20,26 @@ interface IImageOptions extends IElementOptions {
     src?: string;
 }
 interface IRectOptions extends IElementOptions {
-    fill?: string;
-    stroke?: string;
+    attributes?: {
+        x?: string;
+        y?: string;
+        width?: string;
+        height?: string;
+        fill?: string;
+        stroke?: string;
+        'stroke-width'?: string;
+    };
+}
+interface ICircleOptions extends IElementOptions {
+    attributes?: {
+        cx?: string;
+        cy?: string;
+        rx?: string;
+        ry?: string;
+        fill?: string;
+        stroke?: string;
+        'stroke-width'?: string;
+    };
 }
 
 interface IElementData extends IElementOptions {

@@ -9,6 +9,11 @@ export const IconButton = ({ children, className, ...props }: TButtonProps) => (
         {children}
     </button>
 );
+export const ListItem = ({ children, className, ...props }: TButtonProps) => (
+    <button className={classNames('block hover:shadow p-1 w-full text-left', className)} {...props}>
+        {children}
+    </button>
+);
 
 export const Vr = ({ className, ...props }: THTMLProps) => <div className={classNames('border-r border-gray-300', className)} {...props}></div>;
 export const Hr = ({ className, ...props }: THTMLProps) => <div className={classNames('border-t border-gray-300', className)} {...props}></div>;

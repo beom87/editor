@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { MdFormatColorReset } from 'react-icons/md';
 
 type TColorPickerProps = { onColorChange?: (hex: string) => void };
 
@@ -24,7 +25,7 @@ export default function ColorPicker({ onColorChange }: TColorPickerProps) {
                 <input className="mx-1" type="color" onChange={onAddColorChange}></input>
             </div>
             <div className="border-t border-gray-300"></div>
-            <div className="mt-1">
+            <div className="mt-2 mb-0.5">
                 {colors.map((color) => (
                     <button
                         key={color}
@@ -34,6 +35,13 @@ export default function ColorPicker({ onColorChange }: TColorPickerProps) {
                     ></button>
                 ))}
             </div>
+            <div className="border-t border-gray-300"></div>
+            <button className="w-full flex items-center px-1 py-1 border rounded my-1 justify-center" onClick={() => onColorChange?.('transparent')}>
+                <span className="mx-1">
+                    <MdFormatColorReset />
+                </span>
+                <span className="text-sm font-semibold">Transparent</span>
+            </button>
         </div>
     );
 }
