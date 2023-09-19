@@ -83,7 +83,7 @@ export default class Renderer {
         this._isPlay = isPlay;
         this._playBtn.textContent = isPlay ? 'PAUSE' : 'PLAY';
     }
-    private async _preloadImages(json: string) {
+    private async _preloadImages(_json: string) {
         // const promises = json.match(/(DI|AI)\d{8}.(png|svg)/g)?.map(
         //     (src) => () =>
         //         new Promise<void>((resolve) => {
@@ -93,7 +93,7 @@ export default class Renderer {
         //         })
         // );
     }
-    private async _preloadSounds(json: string) {
+    private async _preloadSounds(_json: string) {
         // new Promise<void>((resolve) => {
         //     const audio = new Audio();
         //     audio.src = '';
